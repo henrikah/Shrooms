@@ -10,4 +10,8 @@ public class FeedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
     }
+
+    private int hallo(){
+        return 0;
+    }
 }
