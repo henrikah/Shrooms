@@ -78,7 +78,6 @@ public class CreateUserActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             saveUser();
 
-
                             signIn(emailTxt,passwordTxt);
                         } else {
 
@@ -105,7 +104,7 @@ public class CreateUserActivity extends AppCompatActivity {
 
         // lager et dokument slutt
 
-        // Forsøk på å legge til dokumentet i firestore * start *. funker foreløbig ikke.
+        // Legger til et dokument i firestore
         db.collection("Users").document(user.getUid())
                 .set(userMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -119,13 +118,11 @@ public class CreateUserActivity extends AppCompatActivity {
             }
         });
 
-        // Forsøk på å legge til dokumentet i firestore * slutt *
+
 
     }
 
-
-
-
+    // Tar for seg innlogging
     public void signIn(String email,String password){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -145,4 +142,6 @@ public class CreateUserActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
 }
