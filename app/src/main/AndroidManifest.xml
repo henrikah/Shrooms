@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".FeedActivity" />
-        <activity android:name=".CreateUserActivity"></activity>
+        <activity android:name=".CreateUserActivity" />
+        <activity android:name=".LoginActivity"></activity>
     </application>
 
 </manifest>
