@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -18,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -56,10 +58,7 @@ public class CreateUserActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 Register();
-
             }
         });
 
@@ -71,71 +70,61 @@ public class CreateUserActivity extends AppCompatActivity {
        final String firstnameTxt = firstname.getText().toString().trim();
        final String lastnameTxt = lastname.getText().toString().trim();
 
+       // Metode for å opprette en bruker
         mAuth.createUserWithEmailAndPassword(emailTxt, passwordTxt)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user);
-                            Map<String, Object> userMap = new HashMap<>();
-                            userMap.put("Email", emailTxt);
-                            userMap.put("Firstname",firstnameTxt);
-                            userMap.put("Lastname", lastnameTxt);
-                            userMap.put("Uid", user.getUid());
+                            saveUser();
 
 
-                            db.collection("shrooms").document("Users").set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    // Det gikk bra
-                                    DocumentReference docRef = db.collection("shrooms").document("Users");
-                                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                DocumentSnapshot document = task.getResult();
-                                                if (document.exists()) {
-                                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                                    Log.d(TAG,"Bruker registrert");
-                                                } else {
-                                                    Log.d(TAG, "No such document");
-                                                }
-                                            } else {
-                                                Log.d(TAG, "get failed with ", task.getException());
-                                            }
-                                        }
-                                    });
-
-
-
-
-
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    // Det gikk ikke!
-                                }
-                            });
-
-                                  //  collection('users').doc(currentUser.uid).set(currentUser)
                             signIn(emailTxt,passwordTxt);
                         } else {
 
-                            // If sign in fails, display a message to the user.
-                            //Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            //Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
-                              //      Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
                         }
-
-                        // ...
                     }
                 });
     }
+
+
+    public void saveUser(){
+        final String emailTxt = email.getText().toString().trim();
+        final String passwordTxt = password.getText().toString().trim();
+        final String firstnameTxt = firstname.getText().toString().trim();
+        final String lastnameTxt = lastname.getText().toString().trim();
+
+        // lager et dokument start
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("Email", emailTxt);
+        userMap.put("Firstname",firstnameTxt);
+        userMap.put("Lastname", lastnameTxt);
+        userMap.put("Uid", user.getUid());
+
+        // lager et dokument slutt
+
+        // Forsøk på å legge til dokumentet i firestore * start *. funker foreløbig ikke.
+        db.collection("Users").document(user.getUid())
+                .set(userMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                       Toast.makeText(CreateUserActivity.this,"Bruker Registrert 1",Toast.LENGTH_SHORT).show();                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(CreateUserActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Forsøk på å legge til dokumentet i firestore * slutt *
+
+    }
+
+
+
 
     public void signIn(String email,String password){
         mAuth.signInWithEmailAndPassword(email, password)
@@ -143,21 +132,16 @@ public class CreateUserActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                           // Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user);
+
+                            Log.d(TAG, "Innlogging gikk bra.");
+
                             Intent myIntent = new Intent(CreateUserActivity.this, FeedActivity.class);
                             startActivity(myIntent);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            //Log.w(TAG, "signInWithEmail:failure", task.getException());
-                           // Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
-                             //       Toast.LENGTH_SHORT).show();
-                           // updateUI(null);
-                        }
 
-                        // ...
+                        } else {
+                           Log.d(TAG, "Innlogging feilet.");
+                        }
                     }
                 });
     }
