@@ -15,12 +15,11 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
-    private ArrayList<String> mTitles = new ArrayList<>();
-    private ArrayList<String> mImages = new ArrayList<>();
+    private ArrayList<Post> Posts = new ArrayList<>();
     private Context mContext;
 
-    public RecyclerViewAdapter(ArrayList<String> mTitles, Context mContext) {
-        this.mTitles = mTitles;
+    public RecyclerViewAdapter(ArrayList<Post> mPost, Context mContext) {
+        this.Posts= mPost;
         this.mContext = mContext;
     }
 
@@ -35,12 +34,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.image.setImageResource(R.drawable.logo);
-        viewHolder.title.setText(mTitles.get(i));
+        viewHolder.title.setText(Posts.get(i).getTitle());
+        viewHolder.distance.setText(Posts.get(i).getDistance() + " Km");
     }
 
     @Override
     public int getItemCount() {
-        return mTitles.size();
+        return Posts.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -48,12 +48,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ImageView image;
         TextView title;
         RelativeLayout feedLayout;
+        TextView distance;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.feedItemImage);
             title = itemView.findViewById(R.id.feedItemTitle);
             feedLayout = itemView.findViewById(R.id.feedItemLayout);
+            distance = itemView.findViewById(R.id.feedItemDistance);
         }
     }
 }
