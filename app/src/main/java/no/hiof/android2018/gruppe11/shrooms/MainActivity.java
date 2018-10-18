@@ -23,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
 
+        Intent myIntent = new Intent(MainActivity.this, FeedActivity.class);
+        startActivity(myIntent);
+
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         // Sjekker om brukeren allerede er logget inn eller ikke
@@ -48,22 +51,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Post post = new Post("Halla",123,"Kappa1231321321");
-        savePostToDatabase(post);
+
 
 
     }
-    public  void savePostToDatabase(Post post){
-        Map<String, Object> postMap = new HashMap<>();
-        postMap.put("Title",post.getTitle());
-        postMap.put("Distance", post.getDistance());
-        postMap.put("userID",post.getUser());
 
-        db.collection("Posts").document().set(postMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                // det gikk bra
-            }
-        });
-    }
 }

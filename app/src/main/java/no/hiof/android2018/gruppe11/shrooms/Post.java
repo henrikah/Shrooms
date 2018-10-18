@@ -1,10 +1,12 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
 import android.graphics.Bitmap;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -15,28 +17,34 @@ public class Post {
     public String title;
     public int distance;
     public String user;
+    public Long timeStamp;
 
 
 
     //public Bitmap image;
-    public Post(String title, int distance, String user){
+    public Post(String title, int distance, String user, Long timeStamp){
 
 
         this.title = title;
         this.distance = distance;
         this.user = user;
+        this.timeStamp = timeStamp ;
+
+
+
        // this.image = image;
-
-
-
-
-
 
 
     }
     /*LITEN ENDRING FOR Å SE OM NOE ENDRET SEG*/
 
+    public Long getTimeStamp() {
+        return timeStamp;
+    }
 
+    public void setTimeStamp(Long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
 
     public String getTitle() {
         return title;
