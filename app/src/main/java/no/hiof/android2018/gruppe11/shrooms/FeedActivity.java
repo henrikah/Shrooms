@@ -53,7 +53,7 @@ public class FeedActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String title = document.getString("Title");
-                               // Integer distance = document.get("Distance");
+                               Integer distance = document.getLong("Distance").intValue();
                                // posts.add();
                                 Log.d(TAG, document.getId() + " => " + document.getData());
 
