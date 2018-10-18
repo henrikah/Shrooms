@@ -11,12 +11,19 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
     private ArrayList<Post> Posts = new ArrayList<>();
     private Context mContext;
+    private FirebaseFirestore db;
 
     public RecyclerViewAdapter(ArrayList<Post> mPost, Context mContext) {
         this.Posts= mPost;
@@ -58,4 +65,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             distance = itemView.findViewById(R.id.feedItemDistance);
         }
     }
+
+
+
 }
