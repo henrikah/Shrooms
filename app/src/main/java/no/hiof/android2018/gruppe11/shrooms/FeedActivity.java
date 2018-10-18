@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class FeedActivity extends AppCompatActivity {
 
-    private ArrayList<String> titles = new ArrayList<>();
+    private ArrayList<Post> posts = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,23 +17,17 @@ public class FeedActivity extends AppCompatActivity {
         setnames();
     }
     private void setnames(){
-        titles.add("Hallo");
-        titles.add("Hallo2");
-        titles.add("Hallo3");
-        titles.add("Hallo4");
-        titles.add("Hallo5");
-        titles.add("Hallo5");
-        titles.add("Hallo5");
-        titles.add("Hallo5");
-        titles.add("Hallo5");
-
+        posts.add(new Post("Brunsopp",2,"Herman"));
+        posts.add(new Post("Blåsopp",4,"Herman"));
+        posts.add(new Post("Kurdersopp",8,"Herman"));
+        posts.add(new Post("Kinesersopp",10,"Herman"));
         initRecyclerView();
 
     }
 
     private void initRecyclerView(){
         RecyclerView recyclerView = findViewById(R.id.mainFeed);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(titles, this);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(posts, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
