@@ -1,6 +1,6 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
-//Test
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ public class Sopp {
     private String info;
     private int imageId;
 
-    public Sopp(String navn, String id, String info, int imageId) {
+    public Sopp(String id, String navn, String info) {
         this.navn = navn;
         this.id = id;
         this.info = info;
