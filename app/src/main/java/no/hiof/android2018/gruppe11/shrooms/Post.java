@@ -13,6 +13,7 @@ public class Post {
         this.user = user;
        // this.image = image;
     }
+    /*LITEN ENDRING FOR Å SE OM NOE ENDRET SEG*/
 
     public String getTitle() {
         return title;
