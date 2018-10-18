@@ -1,52 +1,20 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Sopp {
-    private static List<Sopp> soppListe;
-    private String navn;
-    private String id;
-    private String info;
+
+    private String name;
     private int imageId;
 
-    public Sopp(String id, String navn, String info) {
-        this.navn = navn;
-        this.id = id;
-        this.info = info;
-        this.imageId = imageId;
-        soppListe.add(this);
+    public String getname() {
+        return name;
     }
 
-    public static List<Sopp> getSoppListe() {
-
-        return soppListe;
-    }
-
-    public String getNavn() {
-        return navn;
-    }
-
-    public void setNavn(String navn) {
-        this.navn = navn;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getInfo() {
-        return info;
-    }
-
-    public void setInfo(String info) {
-        this.info = info;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getImageId() {
@@ -55,5 +23,36 @@ public class Sopp {
 
     public void setImageId(int imageId) {
         this.imageId = imageId;
+    }
+
+    public static List<Sopp> getData() {
+
+        List<Sopp> data = new ArrayList<>();
+
+        int[] images = {
+                R.drawable.sopp1, R.drawable.sopp1,
+                R.drawable.sopp1, R.drawable.sopp1,
+                R.drawable.sopp1, R.drawable.sopp1,
+                R.drawable.sopp1, R.drawable.sopp1,
+                R.drawable.sopp1, R.drawable.sopp1
+        };
+
+        String[] names = {
+                "Fluesopp1", "Fluesopp2",
+                "Fluesopp3", "Fluesopp4",
+                "Fluesopp5", "Fluesopp6",
+                "Fluesopp7", "Fluesopp8",
+                "Fluesopp9", "Fluesopp10"
+        };
+
+        for (int i = 0; i < images.length; i++) {
+
+            Sopp current = new Sopp();
+            current.setName(names[i]);
+            current.setImageId(images[i]);
+            data.add(current);
+        }
+
+        return data;
     }
 }

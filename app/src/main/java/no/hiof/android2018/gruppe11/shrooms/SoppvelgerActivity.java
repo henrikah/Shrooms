@@ -14,22 +14,41 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class SoppvelgerActivity extends Activity {
+import android.support.v7.app.AppCompatActivity;
+
+
+public class SoppvelgerActivity extends AppCompatActivity {
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_soppvelger);
-        collectSopp();
-        initRecyclerView();
+
+        setUpRecycleView();
     }
 
-    private void collectSopp(){
+    private void setUpRecycleView() {
+        recyclerView = findViewById(R.id.soppRecycler);
+        recyclerView.setAdapter(new SoppRecyclerAdapter(this, Sopp.getData()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+    }
+
+}
+
+
+
+
+
+
+   /*  private void collectSopp(){
         FirebaseFirestore fb = FirebaseFirestore.getInstance();
         CollectionReference soppcollection = fb.collection("Shrooms");
         Query soppQuery = soppcollection;
 
-        soppQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+       soppQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
@@ -45,13 +64,6 @@ public class SoppvelgerActivity extends Activity {
                 }
             }
         });
-    }
+    } */
 
-    private void initRecyclerView(){
-        RecyclerView recyclerView = findViewById(R.id.mainFeed);
-        SoppRecyclerAdapter adapter = new SoppRecyclerAdapter(this, Sopp.getSoppListe());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }
 
-}

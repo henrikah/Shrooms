@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+
         //Gjemmer Actionbaren:
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();

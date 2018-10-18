@@ -17,7 +17,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import no.hiof.android2018.gruppe11.shrooms.R;
+import no.hiof.android2018.gruppe11.shrooms.Sopp;
 
 public class SoppRecyclerAdapter extends RecyclerView.Adapter<SoppRecyclerAdapter.ViewHolder> {
     private static final String TAG = "RecycleViewAdapter";
@@ -38,7 +42,7 @@ public class SoppRecyclerAdapter extends RecyclerView.Adapter<SoppRecyclerAdapte
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         db = FirebaseFirestore.getInstance();
 
-        View itemView = layoutInflater.inflate(R.layout.activity_soppvelger, viewGroup, false);
+        View itemView = layoutInflater.inflate(R.layout.layout_soppitem, viewGroup, false);
         return new ViewHolder(itemView);
     }
 
@@ -58,22 +62,18 @@ public class SoppRecyclerAdapter extends RecyclerView.Adapter<SoppRecyclerAdapte
 
         ImageView image;
         TextView text;
-        TextView text2;
         RelativeLayout parentLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            //image = itemView.findViewById(R.id.soppImageView);
-            text = itemView.findViewById(R.id.soppTextView);
-            text2 = itemView.findViewById(R.id.soppTextView2);
-            parentLayout = itemView.findViewById(R.id.soppLayout);
+            image = itemView.findViewById(R.id.soppImage);
+            text = itemView.findViewById(R.id.soppText);
+            parentLayout = itemView.findViewById(R.id.parentLayout);
         }
 
         public void setSopp(Sopp sopp){
-            //image.setImageResource(sopp.getImageId());
-
-            text.setText(sopp.getNavn());
-            text2.setText(sopp.getId());
+            image.setImageResource(sopp.getImageId());
+            text.setText(sopp.getname());
 
         }
     }
