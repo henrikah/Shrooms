@@ -3,7 +3,6 @@ package no.hiof.android2018.gruppe11.shrooms;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +35,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         viewHolder.image.setImageResource(R.drawable.logo);
         viewHolder.title.setText(Posts.get(i).getTitle());
         viewHolder.distance.setText(Posts.get(i).getDistance() + " Km");
+        viewHolder.user.setText(Posts.get(i).getUser());
     }
 
     @Override
@@ -49,6 +49,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView title;
         RelativeLayout feedLayout;
         TextView distance;
+        TextView user;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -56,6 +57,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             title = itemView.findViewById(R.id.feedItemTitle);
             feedLayout = itemView.findViewById(R.id.feedItemLayout);
             distance = itemView.findViewById(R.id.feedItemDistance);
+            user = itemView.findViewById(R.id.feedItemUser);
         }
     }
 }
