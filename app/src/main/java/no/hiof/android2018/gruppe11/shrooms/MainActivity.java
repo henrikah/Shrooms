@@ -28,23 +28,20 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         // Sjekker om brukeren allerede er logget inn eller ikke
-       /* if(currentUser != null){
+        if(currentUser != null){
             Intent myIntent = new Intent(MainActivity.this, FeedActivity.class);
             startActivity(myIntent);
         }else {
 
             Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(myIntent);
-        } */
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-
-        Intent temp = new Intent(MainActivity.this, SoppvelgerActivity.class);
-        startActivity(temp);
 
 
         //Gjemmer Actionbaren:
