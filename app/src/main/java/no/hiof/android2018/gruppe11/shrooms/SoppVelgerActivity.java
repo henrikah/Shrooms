@@ -15,7 +15,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class SoppvelgerActivity extends Activity {
+public class SoppVelgerActivity extends Activity {
     private RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class SoppvelgerActivity extends Activity {
                     }
                 }
                 else {
-                    Toast.makeText(SoppvelgerActivity.this, "Nei", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SoppVelgerActivity.this, "Nei", Toast.LENGTH_SHORT).show();
                 }
 
                 // Starter sopprecycleren etter at soppene er instansierte
