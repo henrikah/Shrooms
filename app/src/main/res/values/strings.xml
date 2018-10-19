@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Shrooms</string>
+    <string name="title_activity_sopp_velger">SoppVelgerActivity</string>
 </resources>
