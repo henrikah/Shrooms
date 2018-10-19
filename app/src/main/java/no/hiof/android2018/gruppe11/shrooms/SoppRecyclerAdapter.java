@@ -61,21 +61,21 @@ public class SoppRecyclerAdapter extends RecyclerView.Adapter<SoppRecyclerAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        //ImageView image;
+        ImageView image;
         TextView text;
         TextView text2;
         RelativeLayout parentLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            // image = itemView.findViewById(R.id.soppImage);
+            image = itemView.findViewById(R.id.soppBilde);
             text2 = itemView.findViewById(R.id.soppText2);
             text = itemView.findViewById(R.id.soppText);
             parentLayout = itemView.findViewById(R.id.parentLayout);
         }
 
         public void setSopp(Sopp sopp){
-            //image.setImageResource((Bitmap) sopp.getBilde());
+            image.setImageResource(R.drawable.sopp1);
             text.setText(sopp.getName());
             text2.setText(sopp.getBeskrivelse());
 

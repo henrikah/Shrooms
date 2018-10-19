@@ -13,13 +13,14 @@ public class SoppVelgerActivity extends Activity {
         setContentView(R.layout.activity_sopp_velger);
 
 
-    new Sopp("Fluesopp", "fff", "Hei", null, true);
-
-    setUpRecycleView();
+    new Sopp("Fluesopp", "fff", "Fin og rød", null, true);
+    new Sopp("Fotsopp", "ffddf", "Klør veldig", null, true);
+    new Sopp("Underlivsopp", "ffddf", "Lukter vondt", null, true);
+    initSoppRecycler();
     }
 
 
-    private void setUpRecycleView() {
+    private void initSoppRecycler() {
         recyclerView = findViewById(R.id.soppRecycler);
         recyclerView.setAdapter(new SoppRecyclerAdapter(this, Sopp.getSoppListe()));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
