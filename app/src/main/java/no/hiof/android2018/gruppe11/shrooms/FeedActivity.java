@@ -30,7 +30,7 @@ public class FeedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
         setnames();
-        fillSoppList();
+       // fillSoppList();
         displayPosts();
         initRecyclerView();
     }
@@ -53,41 +53,41 @@ public class FeedActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    public void fillSoppList(){
-        db.collection("Posts")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-
-                                String title = document.getString("Title");
-                               Integer distance = (document.getLong("Distance").intValue());
-
-                               String userName = document.getString("UserID");
-                               Long timeStamp = document.getLong("Timestamp");
-                                Post p = new Post(title,distance,userName,timeStamp);
-                                posts.add(p);
-
-
-
-                                // det gikk fint
-                               //Toast.makeText(FeedActivity.this, "funket fint",Toast.LENGTH_SHORT).show();
-                                Log.d(TAG, "DokumentID: "+document.getId());
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
-
-
-        Log.d(TAG, "Kode: kjørte ferdig");
-    }
+//    public void fillSoppList(){
+//        db.collection("Posts")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//
+//                                String title = document.getString("Title");
+//                               Integer distance = (document.getLong("Distance").intValue());
+//
+//                               String userName = document.getString("UserID");
+//                               Long timeStamp = document.getLong("Timestamp");
+//                                Post p = new Post(title,distance,userName,timeStamp);
+//                                posts.add(p);
+//
+//
+//
+//                                // det gikk fint
+//                               //Toast.makeText(FeedActivity.this, "funket fint",Toast.LENGTH_SHORT).show();
+//                                Log.d(TAG, "DokumentID: "+document.getId());
+//                            }
+//                        } else {
+//                            Log.d(TAG, "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
+//
+//
+//
+//        Log.d(TAG, "Kode: kjørte ferdig");
+//    }
 
     public  void savePostToDatabase(Post post){
         Map<String, Object> postMap = new HashMap<>();
