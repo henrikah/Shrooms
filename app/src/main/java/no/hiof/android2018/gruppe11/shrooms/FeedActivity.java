@@ -29,10 +29,10 @@ public class FeedActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
-        setnames();
+       setnames();
         fillSoppList();
 
-        initRecyclerView();
+        Log.d(TAG, "PostLength:" + posts.size());
     }
     private void setnames(){
         Post d1 = new Post("Brunsopp",2,"Herman",System.currentTimeMillis());
@@ -54,17 +54,17 @@ public class FeedActivity extends AppCompatActivity {
     }
 
     public void fillSoppList(){
+        Log.d(TAG, "Nå er vi her 1");
         db.collection("Posts")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-
-
                             @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
+                                Log.d(TAG, "Nå er vi her 2");
+                                if (task.isSuccessful()) {
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
-
+                                Log.d(TAG, "Nå er vi her 3");
                                 String title = document.getString("Title");
                                Integer distance = (document.getLong("Distance").intValue());
 
@@ -78,11 +78,14 @@ public class FeedActivity extends AppCompatActivity {
                                 // det gikk fint
                                //Toast.makeText(FeedActivity.this, "funket fint",Toast.LENGTH_SHORT).show();
                                 Log.d(TAG, "DokumentID: "+document.getId());
+
                             }
                        } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-                    }
+
+                        initRecyclerView();
+                        }
                 });
 
 
