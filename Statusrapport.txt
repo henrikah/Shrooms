@@ -1,0 +1,11 @@
+Status rapport:
+
+- Man kan registrere bruker 
+- Man kan logge inn med registrert bruker
+- Man kan legge til sopper i databasen
+- Man kan hente ut sopper fra databasen
+- Det finnes en feed over sopper
+- Man kan lagre posts i databasen
+- Vi har ikke klart å få posts fra databasen over til feed, det hadde vi en del problemer med.
+
+Vi ligger ganske godt ann, vi fikk en del problemer rett før innleveringsfristen.
