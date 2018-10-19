@@ -23,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
 
+        Intent myIntent = new Intent(MainActivity.this, FeedActivity.class);
+        startActivity(myIntent);
+
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         // Sjekker om brukeren allerede er logget inn eller ikke
@@ -50,8 +53,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+<<<<<<< HEAD
         //Post post = new Post("Halla",123,"Kappa1231321321");
         //savePostToDatabase(post);
+=======
+
+>>>>>>> c3a3941f629074cb62a9dc5e8702217d30fb1356
 
 
     }
