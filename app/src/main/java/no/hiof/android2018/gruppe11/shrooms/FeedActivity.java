@@ -65,11 +65,12 @@ public class FeedActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
                                 String title = document.getString("Title");
-                               Integer distance = document.getLong("Distance").intValue();
+                               Integer distance = (document.getLong("Distance").intValue());
+
                                String userName = document.getString("UserID");
                                Long timeStamp = document.getLong("Timestamp");
-
-                                posts.add(new Post(title,distance,userName,timeStamp));
+                                Post p = new Post(title,distance,userName,timeStamp);
+                                posts.add(p);
 
 
 
@@ -105,6 +106,7 @@ public class FeedActivity extends AppCompatActivity {
 
     public void displayPosts(){
         Log.d(TAG, "Kode: kjører denne?");
+        Log.d(TAG,"Kode: TEST:" + posts.get(1).getTitle());
         for (Post p: posts) {
             Log.d(TAG, "Kode: tittel:  "+p.getTitle());
         }
