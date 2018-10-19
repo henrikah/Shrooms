@@ -27,12 +27,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Sjekker om brukeren allerede er logget inn eller ikke
         if(currentUser != null){
-            //Intent myIntent = new Intent(MainActivity.this, FeedActivity.class);
-            //startActivity(myIntent);
+            Intent myIntent = new Intent(MainActivity.this, FeedActivity.class);
+            startActivity(myIntent);
         }else {
 
-           // Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
-            //startActivity(myIntent);
+            Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(myIntent);
         }
     }
 
@@ -41,8 +41,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        Intent intent = new Intent(MainActivity.this, SoppVelgerActivity.class);
-        startActivity(intent);
+
 
         //Gjemmer Actionbaren:
         ActionBar actionBar = getSupportActionBar();
@@ -51,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Post post = new Post("Halla",123,"Kappa1231321321");
-        savePostToDatabase(post);
+        //Post post = new Post("Halla",123,"Kappa1231321321");
+        //savePostToDatabase(post);
 
 
     }
