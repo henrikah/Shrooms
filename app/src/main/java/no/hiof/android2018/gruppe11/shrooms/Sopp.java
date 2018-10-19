@@ -1,59 +1,71 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
 
+import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Sopp {
-    private static List<Sopp> soppListe;
-    private String navn;
-    private String id;
-    private String info;
-    private int imageId;
 
-    public Sopp(String id, String navn, String info) {
+    private static ArrayList<Sopp> soppListe = new ArrayList<Sopp>();
+    private String navn;
+    private String soppId;
+    private String beskrivelse;
+    private Bitmap bilde;
+    private boolean giftig;
+
+    public Sopp(String navn, String soppId, String beskrivelse, Bitmap bilde, boolean giftig) {
         this.navn = navn;
-        this.id = id;
-        this.info = info;
-        this.imageId = imageId;
+        this.soppId = soppId;
+        this.beskrivelse = beskrivelse;
+        this.bilde = bilde;
+        this.giftig = giftig;
         soppListe.add(this);
     }
 
-    public static List<Sopp> getSoppListe() {
-
+    public static ArrayList<Sopp> getSoppListe() {
         return soppListe;
     }
+
 
     public String getNavn() {
         return navn;
     }
 
-    public void setNavn(String navn) {
+    public void setName(String navn) {
         this.navn = navn;
     }
 
-    public String getId() {
-        return id;
+    public String getSoppId() {
+        return soppId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setSoppId(String soppId) {
+        this.soppId = soppId;
     }
 
-    public String getInfo() {
-        return info;
+    public String getBeskrivelse() {
+        return beskrivelse;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public void setBeskrivelse(String beskrivelse) {
+        this.beskrivelse = beskrivelse;
     }
 
-    public int getImageId() {
-        return imageId;
+    public Bitmap getBilde() {
+        return bilde;
     }
 
-    public void setImageId(int imageId) {
-        this.imageId = imageId;
+    public void setBilde(Bitmap bilde) {
+        this.bilde = bilde;
+    }
+
+    public boolean isGiftig() {
+        return giftig;
+    }
+
+    public void setGiftig(boolean giftig) {
+        this.giftig = giftig;
     }
 }

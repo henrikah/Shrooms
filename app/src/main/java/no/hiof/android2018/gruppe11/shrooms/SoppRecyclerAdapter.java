@@ -1,6 +1,7 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,16 +12,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+
 
 import java.util.List;
 
+
 public class SoppRecyclerAdapter extends RecyclerView.Adapter<SoppRecyclerAdapter.ViewHolder> {
-    private static final String TAG = "RecycleViewAdapter";
+    private static final String TAG = "SoppRecycler";
     private FirebaseFirestore db;
 
 
@@ -38,7 +37,7 @@ public class SoppRecyclerAdapter extends RecyclerView.Adapter<SoppRecyclerAdapte
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         db = FirebaseFirestore.getInstance();
 
-        View itemView = layoutInflater.inflate(R.layout.activity_soppvelger, viewGroup, false);
+        View itemView = layoutInflater.inflate(R.layout.layout_soppitem, viewGroup, false);
         return new ViewHolder(itemView);
     }
 
@@ -63,17 +62,16 @@ public class SoppRecyclerAdapter extends RecyclerView.Adapter<SoppRecyclerAdapte
 
         public ViewHolder(View itemView) {
             super(itemView);
-            //image = itemView.findViewById(R.id.soppImageView);
-            text = itemView.findViewById(R.id.soppTextView);
-            text2 = itemView.findViewById(R.id.soppTextView2);
-            parentLayout = itemView.findViewById(R.id.soppLayout);
+            image = itemView.findViewById(R.id.soppBilde);
+            text2 = itemView.findViewById(R.id.soppText2);
+            text = itemView.findViewById(R.id.soppText);
+            parentLayout = itemView.findViewById(R.id.parentLayout);
         }
 
         public void setSopp(Sopp sopp){
-            //image.setImageResource(sopp.getImageId());
-
+            image.setImageResource(R.drawable.sopp1);
             text.setText(sopp.getNavn());
-            text2.setText(sopp.getId());
+            text2.setText(sopp.getBeskrivelse());
 
         }
     }
