@@ -12,20 +12,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
-import no.hiof.android2018.gruppe11.shrooms.R;
-import no.hiof.android2018.gruppe11.shrooms.Sopp;
 
 public class SoppRecyclerAdapter extends RecyclerView.Adapter<SoppRecyclerAdapter.ViewHolder> {
-    private static final String TAG = "RecycleViewAdapter";
+    private static final String TAG = "SoppRecycler";
     private FirebaseFirestore db;
 
 
@@ -76,7 +70,7 @@ public class SoppRecyclerAdapter extends RecyclerView.Adapter<SoppRecyclerAdapte
 
         public void setSopp(Sopp sopp){
             image.setImageResource(R.drawable.sopp1);
-            text.setText(sopp.getName());
+            text.setText(sopp.getNavn());
             text2.setText(sopp.getBeskrivelse());
 
         }

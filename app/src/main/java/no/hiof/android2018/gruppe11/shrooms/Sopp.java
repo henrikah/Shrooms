@@ -9,14 +9,14 @@ import java.util.List;
 public class Sopp {
 
     private static ArrayList<Sopp> soppListe = new ArrayList<Sopp>();
-    private String name;
+    private String navn;
     private String soppId;
     private String beskrivelse;
     private Bitmap bilde;
     private boolean giftig;
 
-    public Sopp(String name, String soppId, String beskrivelse, Bitmap bilde, boolean giftig) {
-        this.name = name;
+    public Sopp(String navn, String soppId, String beskrivelse, Bitmap bilde, boolean giftig) {
+        this.navn = navn;
         this.soppId = soppId;
         this.beskrivelse = beskrivelse;
         this.bilde = bilde;
@@ -29,12 +29,12 @@ public class Sopp {
     }
 
 
-    public String getName() {
-        return name;
+    public String getNavn() {
+        return navn;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String navn) {
+        this.navn = navn;
     }
 
     public String getSoppId() {
