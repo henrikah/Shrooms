@@ -1,15 +1,35 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
 
+import android.graphics.Bitmap;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Sopp {
 
+    private static ArrayList<Sopp> soppListe = new ArrayList<Sopp>();
     private String name;
-    private int imageId;
+    private String soppId;
+    private String beskrivelse;
+    private Bitmap bilde;
+    private boolean giftig;
 
-    public String getname() {
+    public Sopp(String name, String soppId, String beskrivelse, Bitmap bilde, boolean giftig) {
+        this.name = name;
+        this.soppId = soppId;
+        this.beskrivelse = beskrivelse;
+        this.bilde = bilde;
+        this.giftig = giftig;
+        soppListe.add(this);
+    }
+
+    public static ArrayList<Sopp> getSoppListe() {
+        return soppListe;
+    }
+
+
+    public String getName() {
         return name;
     }
 
@@ -17,42 +37,35 @@ public class Sopp {
         this.name = name;
     }
 
-    public int getImageId() {
-        return imageId;
+    public String getSoppId() {
+        return soppId;
     }
 
-    public void setImageId(int imageId) {
-        this.imageId = imageId;
+    public void setSoppId(String soppId) {
+        this.soppId = soppId;
     }
 
-    public static List<Sopp> getData() {
+    public String getBeskrivelse() {
+        return beskrivelse;
+    }
 
-        List<Sopp> data = new ArrayList<>();
+    public void setBeskrivelse(String beskrivelse) {
+        this.beskrivelse = beskrivelse;
+    }
 
-        int[] images = {
-                R.drawable.sopp1, R.drawable.sopp1,
-                R.drawable.sopp1, R.drawable.sopp1,
-                R.drawable.sopp1, R.drawable.sopp1,
-                R.drawable.sopp1, R.drawable.sopp1,
-                R.drawable.sopp1, R.drawable.sopp1
-        };
+    public Bitmap getBilde() {
+        return bilde;
+    }
 
-        String[] names = {
-                "Fluesopp1", "Fluesopp2",
-                "Fluesopp3", "Fluesopp4",
-                "Fluesopp5", "Fluesopp6",
-                "Fluesopp7", "Fluesopp8",
-                "Fluesopp9", "Fluesopp10"
-        };
+    public void setBilde(Bitmap bilde) {
+        this.bilde = bilde;
+    }
 
-        for (int i = 0; i < images.length; i++) {
+    public boolean isGiftig() {
+        return giftig;
+    }
 
-            Sopp current = new Sopp();
-            current.setName(names[i]);
-            current.setImageId(images[i]);
-            data.add(current);
-        }
-
-        return data;
+    public void setGiftig(boolean giftig) {
+        this.giftig = giftig;
     }
 }

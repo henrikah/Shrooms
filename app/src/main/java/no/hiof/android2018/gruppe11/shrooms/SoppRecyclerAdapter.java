@@ -1,6 +1,7 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -72,8 +73,8 @@ public class SoppRecyclerAdapter extends RecyclerView.Adapter<SoppRecyclerAdapte
         }
 
         public void setSopp(Sopp sopp){
-            image.setImageResource(sopp.getImageId());
-            text.setText(sopp.getname());
+            //image.setImageResource((Bitmap) sopp.getBilde());
+            text.setText(sopp.getName());
 
         }
     }

@@ -25,17 +25,20 @@ public class SoppvelgerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_soppvelger);
 
-        setUpRecycleView();
+
+        // initSopprecycler();
     }
 
-    private void setUpRecycleView() {
+    /* private void initSopprecycler() {
         recyclerView = findViewById(R.id.soppRecycler);
         recyclerView.setAdapter(new SoppRecyclerAdapter(this, Sopp.getData()));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
-    }
+    } */
 
+
+    
 }
 
 
