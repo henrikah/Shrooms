@@ -17,7 +17,7 @@ public class Post {
     public String title;
     public int distance;
     public String user;
-    public Long timeStamp;
+    public long timeStamp;
 
 
 

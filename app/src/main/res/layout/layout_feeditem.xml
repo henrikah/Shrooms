@@ -21,7 +21,6 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/feedItemImage"
         android:text="Soppnavn"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="24sp" />
     <TextView
     android:id="@+id/feedItemDistance"
@@ -30,7 +29,6 @@
     android:layout_below="@id/feedItemTitle"
     android:layout_toRightOf="@id/feedItemImage"
     android:text="2 Km"
-    android:textColor="@color/common_google_signin_btn_text_dark_focused"
     android:textSize="18sp" />
     <TextView
         android:id="@+id/feedItemPublishedBy"
@@ -39,7 +37,6 @@
         android:layout_below="@id/feedItemDistance"
         android:layout_toRightOf="@id/feedItemImage"
         android:text="Publisert av:"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="20sp" />
     <TextView
         android:id="@+id/feedItemUser"
@@ -48,6 +45,5 @@
         android:layout_below="@id/feedItemPublishedBy"
         android:layout_toRightOf="@id/feedItemImage"
         android:text="Soppnavn"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="18sp" />
 </RelativeLayout>
