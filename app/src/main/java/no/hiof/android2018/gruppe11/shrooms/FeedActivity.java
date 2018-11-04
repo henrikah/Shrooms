@@ -1,5 +1,6 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,16 +30,16 @@ public class FeedActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
-       setnames();
+        setnames();
+        Intent myIntent = new Intent(FeedActivity.this, bottomNavTest.class);
+        startActivity(myIntent);
+
+
         fillSoppList();
 
         Log.d(TAG, "PostLength:" + posts.size());
     }
     private void setnames(){
-        Post d1 = new Post("Brunsopp",2,"Herman",System.currentTimeMillis());
-        Post d2 = new Post("Blåsopp",4,"Herman",System.currentTimeMillis());
-        Post d3 = new Post("Kurdersopp",8,"Herman",System.currentTimeMillis());
-        Post d4 = new Post("Kinesersopp",10,"Herman",System.currentTimeMillis());
 
 
        // initRecyclerView();

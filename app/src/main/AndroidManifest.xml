@@ -21,7 +21,8 @@
         <activity android:name=".LoginActivity" />
         <activity
             android:name=".SoppVelgerActivity"
-            android:label="@string/title_activity_sopp_velger"></activity>
+            android:label="@string/title_activity_sopp_velger" />
+        <activity android:name=".bottomNavTest"></activity>
     </application>
 
 </manifest>

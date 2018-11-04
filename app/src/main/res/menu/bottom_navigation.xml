@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_feed"
+        android:title="Feed"
+        android:icon="@drawable/ic_format_list_bulleted_black_24dp"
+        />
+    <item
+        android:icon="@drawable/ic_add_box_black_24dp"
+        android:id="@+id/nav_new-post"
+        android:title="new_post"
+        />
+    <item
+        android:id="@+id/nav_my-posts"
+        android:title="My_posts"
+        android:icon="@drawable/ic_face_black_24dp"
+        />
+</menu>

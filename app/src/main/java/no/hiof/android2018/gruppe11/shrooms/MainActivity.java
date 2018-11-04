@@ -37,13 +37,14 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-
         //Gjemmer Actionbaren:
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
 
     }
