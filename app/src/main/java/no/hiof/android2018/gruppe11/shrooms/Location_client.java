@@ -5,8 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
@@ -16,17 +14,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 public class Location_client {
 
-    private LocationManager locationManager;
-    private LocationListener locationListener;
     static FusedLocationProviderClient mFusedLocationClient;
-
+    private static String retLocation = "Balle";
 
 
     //Henter og returnerer et Location-objekt
-    public static Location getLocation(Context context, Activity activity) {
+    public static String getLocation(Context context, Activity activity) {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-        final Location[] retLocation = new Location[1];
+
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -46,22 +42,24 @@ public class Location_client {
 
                 }
             } else {
-                // Permission has already been granted
+
             }
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(activity, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+
+                            if (location != null) {
+                                retLocation = "Yupp";
+                            }
+                            else {
+                                retLocation = "Nope";
+                            }
+                        }
+                    });
         }
 
-
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(activity, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-
-                        if (location != null) {
-                            retLocation[0] = location;
-                        }
-                    }
-                });
-        return retLocation[0];
+        return retLocation;
     }
 
 }

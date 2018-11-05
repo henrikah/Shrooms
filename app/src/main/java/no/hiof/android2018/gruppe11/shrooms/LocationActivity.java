@@ -24,7 +24,7 @@ public class LocationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_location);
 
         final TextView locationText = findViewById(R.id.locationText);
-        locationText.setText(Location_client.getLocation(this, this).toString());
+        locationText.setText(Location_client.getLocation(this, this));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
