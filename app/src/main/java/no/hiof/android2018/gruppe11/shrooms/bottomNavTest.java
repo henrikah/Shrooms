@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class bottomNavTest extends AppCompatActivity {
 
@@ -35,10 +36,14 @@ public class bottomNavTest extends AppCompatActivity {
                         case R.id.nav_my_posts:
                             selectedFragment = new MyPostFragment();
                             break;
+                        case R.id.nav_map:
+                            Toast.makeText(bottomNavTest.this, "Opening maps...", Toast.LENGTH_LONG).show();
+                            break;
 
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
-
+                    if(selectedFragment != null) {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+                    }
                     return true;
 
                 }
