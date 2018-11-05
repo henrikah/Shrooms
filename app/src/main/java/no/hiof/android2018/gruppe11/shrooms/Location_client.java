@@ -14,14 +14,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 public class Location_client {
 
-    static FusedLocationProviderClient mFusedLocationClient;
+
     private static String retLocation = "Balle";
 
 
     //Henter og returnerer et Location-objekt
     public static String getLocation(Context context, Activity activity) {
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
 
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
