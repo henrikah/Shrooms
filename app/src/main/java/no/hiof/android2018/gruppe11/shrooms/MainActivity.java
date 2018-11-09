@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(myIntent);
         }else {
 
-            Intent myIntent = new Intent(MainActivity.this, bottomNavTest.class);
+            Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(myIntent);
         }
     }
