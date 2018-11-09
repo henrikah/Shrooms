@@ -20,20 +20,16 @@ public class MainActivity extends AppCompatActivity {
 
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        /*
-        REMOVE AFTER
-         */
-        Intent myIntent = new Intent(MainActivity.this, CameraActivity.class);
-        startActivity(myIntent);
-        // Sjekker om brukeren allerede er logget inn eller ikke
-//        if(currentUser != null){
-//            Intent myIntent = new Intent(MainActivity.this, LocationActivity.class);
-//            startActivity(myIntent);
-//        }else {
-//
-//            Intent myIntent = new Intent(MainActivity.this, LocationActivity.class);
-//            startActivity(myIntent);
-//        }
+
+//         Sjekker om brukeren allerede er logget inn eller ikke
+        if(currentUser != null){
+            Intent myIntent = new Intent(MainActivity.this, FeedActivity.class);
+            startActivity(myIntent);
+        }else {
+
+            Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(myIntent);
+        }
     }
 
     @Override

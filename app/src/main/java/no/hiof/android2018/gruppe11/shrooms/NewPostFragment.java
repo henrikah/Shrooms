@@ -33,8 +33,10 @@ public class NewPostFragment extends Fragment {
     }
 
     private void openCamera(){
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePictureIntent,0);
+        Intent intent = new Intent(getActivity(), CameraActivity.class);
+        startActivity(intent);
+        //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //startActivityForResult(takePictureIntent,0);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
