@@ -23,11 +23,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Sjekker om brukeren allerede er logget inn eller ikke
         if(currentUser != null){
-            Intent myIntent = new Intent(MainActivity.this, LocationActivity.class);
+            Intent myIntent = new Intent(MainActivity.this, bottomNavTest.class);
             startActivity(myIntent);
         }else {
 
-            Intent myIntent = new Intent(MainActivity.this, LocationActivity.class);
+            Intent myIntent = new Intent(MainActivity.this, bottomNavTest.class);
             startActivity(myIntent);
         }
     }

@@ -1,5 +1,6 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ public class FeedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
         super.onCreate(savedInstanceState);
+        Intent myIntent = new Intent(FeedActivity.this, bottomNavTest.class);
+        startActivity(myIntent);
         setContentView(R.layout.activity_feed);
        setnames();
         fillSoppList();
