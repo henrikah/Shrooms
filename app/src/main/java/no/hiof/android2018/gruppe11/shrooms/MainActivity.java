@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        // Sjekker om brukeren allerede er logget inn eller ikke
+//         Sjekker om brukeren allerede er logget inn eller ikke
         if(currentUser != null){
             Intent myIntent = new Intent(MainActivity.this, FeedActivity.class);
             startActivity(myIntent);
