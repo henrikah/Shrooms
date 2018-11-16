@@ -21,7 +21,9 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/feedItemImage"
         android:text="Soppnavn"
-        android:textSize="24sp" />
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:textStyle="bold" />
     <TextView
     android:id="@+id/feedItemDistance"
     android:layout_width="wrap_content"
@@ -53,5 +55,6 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/feedItemImage"
         android:layout_toEndOf="@+id/feedItemImage"
+        android:backgroundTint="@android:color/transparent"
         android:text="Finn på kartet" />
 </RelativeLayout>
