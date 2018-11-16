@@ -17,26 +17,59 @@ public class Post {
     public String title;
     public int distance;
     public String user;
+    public String description;
     public long timeStamp;
+    public Bitmap bilde;
 
 
 
     //public Bitmap image;
-    public Post(String title, int distance, String user, Long timeStamp){
+    public Post(String title, int distance, String user, String description){
 
 
         this.title = title;
         this.distance = distance;
         this.user = user;
-        this.timeStamp = timeStamp ;
-
+        this.timeStamp = System.currentTimeMillis() ;
+        this.description = description;
 
 
        // this.image = image;
+    }
+
+    public Post(String title, int distance, String user,String description, Bitmap bilde){
 
 
+        this.title = title;
+        this.distance = distance;
+        this.user = user;
+        this.timeStamp = System.currentTimeMillis() ;
+        this.description = description;
+        this.bilde = bilde;
+
+        // this.image = image;
     }
     /*LITEN ENDRING FOR Å SE OM NOE ENDRET SEG*/
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public Bitmap getBilde() {
+        return bilde;
+    }
+
+    public void setBilde(Bitmap bilde) {
+        this.bilde = bilde;
+    }
 
     public Long getTimeStamp() {
         return timeStamp;

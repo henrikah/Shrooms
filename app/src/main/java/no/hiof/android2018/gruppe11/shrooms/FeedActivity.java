@@ -32,16 +32,16 @@ public class FeedActivity extends AppCompatActivity {
         Intent myIntent = new Intent(FeedActivity.this, bottomNavTest.class);
         startActivity(myIntent);
         setContentView(R.layout.activity_feed);
-       setnames();
+       //setnames();
         fillSoppList();
 
         Log.d(TAG, "PostLength:" + posts.size());
     }
     private void setnames(){
-        Post d1 = new Post("Brunsopp",2,"Herman",System.currentTimeMillis());
-        Post d2 = new Post("Blåsopp",4,"Herman",System.currentTimeMillis());
-        Post d3 = new Post("Kurdersopp",8,"Herman",System.currentTimeMillis());
-        Post d4 = new Post("Kinesersopp",10,"Herman",System.currentTimeMillis());
+        //Post d1 = new Post("Brunsopp",2,"Herman",System.currentTimeMillis());
+        //Post d2 = new Post("Blåsopp",4,"Herman",System.currentTimeMillis());
+        //Post d3 = new Post("Kurdersopp",8,"Herman",System.currentTimeMillis());
+        //Post d4 = new Post("Kinesersopp",10,"Herman",System.currentTimeMillis());
 
 
        // initRecyclerView();
@@ -73,8 +73,8 @@ public class FeedActivity extends AppCompatActivity {
 
                                String userName = document.getString("UserID");
                                Long timeStamp = document.getLong("Timestamp");
-                                Post p = new Post(title,distance,userName,timeStamp);
-                                posts.add(p);
+                              //  Post p = new Post(title,distance,userName,timeStamp);
+                             //   posts.add(p);
 
 
 
