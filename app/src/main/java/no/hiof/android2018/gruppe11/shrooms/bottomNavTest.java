@@ -18,6 +18,15 @@ public class bottomNavTest extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.botNav);
         bottomNav.setOnNavigationItemSelectedListener(listener);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FeedFragment()).commit();
+        if(getIntent().getExtras() != null) {
+            if(getIntent().getExtras().get("image") != null) {
+                Fragment selectedFragment = new NewPostFragment();
+                Bundle args = new Bundle();
+                args.putByteArray("image", (byte[]) getIntent().getExtras().get("image"));
+                selectedFragment.setArguments(args);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+            }
+        }
 
     }
 
