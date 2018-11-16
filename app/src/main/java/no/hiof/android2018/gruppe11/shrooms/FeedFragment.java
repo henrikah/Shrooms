@@ -50,7 +50,9 @@ public class FeedFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, "Nå er vi her 3");
                                 String title = document.getString("Title");
-                                Integer distance = (document.getLong("Distance").intValue());
+                               /// Log.d(TAG,  );
+
+                                Integer distance = document.getLong("Distance").intValue() ;
 
                                 String userName = document.getString("UserID");
                                 Long timeStamp = document.getLong("Timestamp");

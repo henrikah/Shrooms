@@ -32,19 +32,23 @@ public class FeedActivity extends AppCompatActivity {
         Intent myIntent = new Intent(FeedActivity.this, bottomNavTest.class);
         startActivity(myIntent);
         setContentView(R.layout.activity_feed);
-       //setnames();
-        fillSoppList();
+      // setnames();
+        //fillSoppList();
 
         Log.d(TAG, "PostLength:" + posts.size());
     }
     private void setnames(){
-        //Post d1 = new Post("Brunsopp",2,"Herman",System.currentTimeMillis());
-        //Post d2 = new Post("Blåsopp",4,"Herman",System.currentTimeMillis());
-        //Post d3 = new Post("Kurdersopp",8,"Herman",System.currentTimeMillis());
-        //Post d4 = new Post("Kinesersopp",10,"Herman",System.currentTimeMillis());
+        Post d1 = new Post("Brunsopp",2,"Herman","Blablablabla");
+        Post d2 = new Post("Blåsopp",4,"Herman","Blablablabla");
+        Post d3 = new Post("Kurdersopp",8,"Herman","Blablablabla");
+        Post d4 = new Post("Kinesersopp",10,"Herman","Blablablabla");
 
+        savePostToDatabase(d1);
+        savePostToDatabase(d2);
+        savePostToDatabase(d3);
+        savePostToDatabase(d4);
 
-       // initRecyclerView();
+       //initRecyclerView();
 
 
     }
@@ -56,52 +60,15 @@ public class FeedActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    public void fillSoppList(){
-        Log.d(TAG, "Nå er vi her 1");
-        db.collection("Posts")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                Log.d(TAG, "Nå er vi her 2");
-                                if (task.isSuccessful()) {
-
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, "Nå er vi her 3");
-                                String title = document.getString("Title");
-                               Integer distance = (document.getLong("Distance").intValue());
-
-                               String userName = document.getString("UserID");
-                               Long timeStamp = document.getLong("Timestamp");
-                              //  Post p = new Post(title,distance,userName,timeStamp);
-                             //   posts.add(p);
-
-
-
-                                // det gikk fint
-                               //Toast.makeText(FeedActivity.this, "funket fint",Toast.LENGTH_SHORT).show();
-                                Log.d(TAG, "DokumentID: "+document.getId());
-
-                            }
-                       } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-
-                        initRecyclerView();
-                        }
-                });
-
-
-
-        Log.d(TAG, "Kode: kjørte ferdig");
-    }
 
     public  void savePostToDatabase(Post post){
         Map<String, Object> postMap = new HashMap<>();
         postMap.put("Title",post.getTitle());
         postMap.put("Distance", post.getDistance());
-        postMap.put("userID",post.getUser());
+        postMap.put("UserID",post.getUser());
         postMap.put("Timestamp", post.getTimeStamp());
+        postMap.put("Description", post.getDescription());
+
 
         db.collection("Posts").document().set(postMap).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
