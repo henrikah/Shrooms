@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG,"Fikk logget inn");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                             Intent myIntent = new Intent(LoginActivity.this, FeedActivity.class);
+                             Intent myIntent = new Intent(LoginActivity.this, bottomNavTest.class);
                             startActivity(myIntent);
 
                         } else {

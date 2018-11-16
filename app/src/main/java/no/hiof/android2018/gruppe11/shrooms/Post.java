@@ -19,18 +19,17 @@ public class Post {
     public String user;
     public long timeStamp;
     public Bitmap bilde;
-
-
+    
 
     //public Bitmap image;
-    public Post(String title, int distance, String user, Long timeStamp,Bitmap bilde){
+    public Post(String title, int distance, String user, Long timeStamp/*,Bitmap bilde*/){
 
 
         this.title = title;
         this.distance = distance;
         this.user = user;
         this.timeStamp = timeStamp ;
-        this.bilde = bilde;
+        //this.bilde = bilde;
 
 
 
