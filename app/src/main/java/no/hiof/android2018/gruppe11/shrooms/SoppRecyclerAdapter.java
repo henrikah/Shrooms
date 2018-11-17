@@ -50,6 +50,7 @@ public class SoppRecyclerAdapter extends RecyclerView.Adapter<SoppRecyclerAdapte
 
     @Override
     public int getItemCount() {
+
         return soppListe.size();
     }
 
