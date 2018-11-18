@@ -22,11 +22,6 @@ public class SoppVelgerActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sopp_velger);
 
-
-  /*  new Sopp("Fluesopp", "fff", "Fin og rød", null, true);
-    new Sopp("Fotsopp", "ffddf", "Klør veldig", null, true);
-    new Sopp("Underlivsopp", "ffddf", "Lukter vondt", null, true);
-    */
     retrieveSopp();
 
     }

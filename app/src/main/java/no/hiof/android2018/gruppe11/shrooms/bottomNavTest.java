@@ -40,6 +40,9 @@ public class bottomNavTest extends AppCompatActivity {
                         case R.id.nav_map:
                             Toast.makeText(bottomNavTest.this, "Opening maps...", Toast.LENGTH_LONG).show();
                             break;
+                        case R.id.nav_my_profile:
+                            selectedFragment = new MyProfileFragment();
+                            break;
 
                     }
                     if(selectedFragment != null) {
