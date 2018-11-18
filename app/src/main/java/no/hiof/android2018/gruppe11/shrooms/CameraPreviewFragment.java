@@ -2,7 +2,10 @@ package no.hiof.android2018.gruppe11.shrooms;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,11 +20,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.common.images.Size;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 
 public class CameraPreviewFragment extends Fragment {
@@ -71,10 +77,18 @@ public class CameraPreviewFragment extends Fragment {
         cb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity().getApplicationContext(), "Tok bilde lzm", Toast.LENGTH_SHORT).show();
+                cs.takePicture(null, new CameraSource.PictureCallback() {
+                    @Override
+                    public void onPictureTaken(byte[] bytes) {
+                        //cs.stop();
+                        Size size = cs.getPreviewSize();
+                        mListener.onPictureTaken(bytes, size);
+                    }
+                });
             }
         });
-        cs = new CameraSource.Builder(getContext(),textRecognizer).setRequestedFps(60.0f).build();
+        cs = new CameraSource.Builder(getContext(),textRecognizer).setRequestedFps(30f).build();
+
         sv.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
@@ -115,12 +129,6 @@ public class CameraPreviewFragment extends Fragment {
         return view;
     }
     View view;
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -151,6 +159,6 @@ public class CameraPreviewFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onPictureTaken(byte[] bmp, Size size);
     }
 }

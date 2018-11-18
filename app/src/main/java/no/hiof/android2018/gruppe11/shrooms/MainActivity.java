@@ -20,7 +20,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
-
+//        Intent myIntent = new Intent(MainActivity.this, CameraActivity.class);
+//            startActivity(myIntent);
 //         Sjekker om brukeren allerede er logget inn eller ikke
         if(currentUser != null){
             Intent myIntent = new Intent(MainActivity.this, bottomNavTest.class);
