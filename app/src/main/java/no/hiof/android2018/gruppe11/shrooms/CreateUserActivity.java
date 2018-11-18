@@ -1,8 +1,6 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
 import android.content.Intent;
-import android.nfc.Tag;
-import android.os.Debug;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,9 +17,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -133,7 +128,7 @@ public class CreateUserActivity extends AppCompatActivity {
 
                             Log.d(TAG, "Innlogging gikk bra.");
 
-                            Intent myIntent = new Intent(CreateUserActivity.this, FeedActivity.class);
+                            Intent myIntent = new Intent(CreateUserActivity.this, bottomNavTest.class);
                             startActivity(myIntent);
 
                         } else {
