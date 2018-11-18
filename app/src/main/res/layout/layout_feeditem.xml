@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    android:id="@+id/feedItemLayout"
+    >
+
+    <ImageView
+        android:id="@+id/feedItemImage"
+        android:layout_width="144dp"
+        android:layout_height="160dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        app:srcCompat="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/feedItemTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/feedItemImage"
+        android:text="Soppnavn"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+    <TextView
+    android:id="@+id/feedItemDistance"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/feedItemTitle"
+    android:layout_toRightOf="@id/feedItemImage"
+    android:text="2 Km"
+    android:textSize="18sp" />
+    <TextView
+        android:id="@+id/feedItemPublishedBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/feedItemDistance"
+        android:layout_toRightOf="@id/feedItemImage"
+        android:text="Publisert av:"
+        android:textSize="20sp" />
+    <TextView
+        android:id="@+id/feedItemUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/feedItemPublishedBy"
+        android:layout_toRightOf="@id/feedItemImage"
+        android:text="Soppnavn"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/feedItemImage"
+        android:layout_toEndOf="@+id/feedItemImage"
+        android:backgroundTint="@android:color/transparent"
+        android:text="Finn på kartet" />
+</RelativeLayout>
