@@ -30,6 +30,7 @@ public class LocationPick extends AppCompatActivity {
     double longitude;
     boolean hasLocation = false;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
