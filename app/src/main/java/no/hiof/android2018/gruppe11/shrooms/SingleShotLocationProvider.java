@@ -1,11 +1,14 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 
 public class SingleShotLocationProvider {
 
@@ -22,14 +25,26 @@ public class SingleShotLocationProvider {
         if (isNetworkEnabled) {
             Criteria criteria = new Criteria();
             criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
             locationManager.requestSingleUpdate(criteria, new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
                     callback.onNewLocationAvailable(new GPSCoordinates(location.getLatitude(), location.getLongitude()));
                 }
-                @Override public void onStatusChanged(String provider, int status, Bundle extras) { }
-                @Override public void onProviderEnabled(String provider) { }
-                @Override public void onProviderDisabled(String provider) { }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+                }
             }, null);
         } else {
             boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);

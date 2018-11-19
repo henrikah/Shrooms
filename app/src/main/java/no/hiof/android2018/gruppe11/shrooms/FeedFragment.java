@@ -45,7 +45,6 @@ public class FeedFragment extends Fragment {
                     @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
                         latitude = location.latitude;
                         longitude = location.longitude;
-
                         fillSoppList();
                     }
         });
@@ -75,14 +74,12 @@ public class FeedFragment extends Fragment {
 
                                 String title = document.getString("Title");
                                 Integer distance = (document.getLong("Distance").intValue());
-                                GeoPoint loc = document.getString("Location");
                                 String userName = document.getString("UserID");
                                 Long timeStamp = document.getLong("Timestamp");
                                 Post p = new Post(title,distance,userName,timeStamp);
                                 posts.add(p);
                                 // det gikk fint
                                 //Toast.makeText(FeedActivity.this, "funket fint",Toast.LENGTH_SHORT).show();
-
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
