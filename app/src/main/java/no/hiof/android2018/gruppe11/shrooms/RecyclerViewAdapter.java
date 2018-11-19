@@ -32,12 +32,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList<Post> Posts = new ArrayList<>();
     private Context mContext;
     private FirebaseFirestore db;
+
     private StorageReference mStorageRef;
     StorageReference mushroomImagesRef;
     String pictureID;
     private static final String TAG = "RecyclerViewAdapter";
     FileDownloadTask.TaskSnapshot snapshot1;
 
+
+    double firLat;
+    double firLon;
 
 
     public RecyclerViewAdapter(ArrayList<Post> mPost, Context mContext) {
@@ -48,6 +52,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        SingleShotLocationProvider.requestSingleUpdate(mContext,
+                new SingleShotLocationProvider.LocationCallback() {
+                    @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
+                        firLat = location.latitude;
+                        firLon = location.longitude;
+                    }
+                });
+
+
+
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_feeditem, viewGroup, false);
         ViewHolder holder = new ViewHolder(view);
         mStorageRef = FirebaseStorage.getInstance().getReference();
@@ -58,6 +72,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+
         pictureID = Posts.get(i).getBildeNavn();
         mushroomImagesRef = mStorageRef.child("brukerBilder/"+pictureID);
         String bildeNavnUtenJPG = pictureID.substring(0, pictureID.length() - 4);
@@ -90,9 +105,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
        // viewHolder.image.setImageResource();
        // viewHolder.image.setImageResource(R.drawable.logo);
+
+
+
+
+        viewHolder.image.setImageResource(R.drawable.logo);
+
         viewHolder.title.setText(Posts.get(i).getTitle());
-        viewHolder.distance.setText(Posts.get(i).getLocation().toString());
+
         viewHolder.user.setText(Posts.get(i).getUser());
+
+        double secLat = Posts.get(i).getLocation().getLatitude();
+        double secLon = Posts.get(i).getLocation().getLongitude();
+
+        double distance = (Math.sqrt(Math.pow((secLat - firLat),2) + Math.pow((secLon - firLon),2))) * 110.57;
+        viewHolder.distance.setText(distance + " Km");
     }
 
     @Override
