@@ -10,9 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -20,7 +24,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 public class FeedFragment extends Fragment {
-
+    FirebaseAuth mAuth;
+    FirebaseUser mUser;
     private FirebaseFirestore db;
     private static final String TAG = "FeedActivity";
     private ArrayList<Post> posts = new ArrayList<>();
@@ -29,8 +34,11 @@ public class FeedFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
         super.onCreate(savedInstanceState);
         fillSoppList();
+
     }
 
     @Nullable
@@ -41,14 +49,14 @@ public class FeedFragment extends Fragment {
     }
 
     public void fillSoppList(){
-        Log.d(TAG, "Nå er vi her 1");
+
         db.collection("Posts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        Log.d(TAG, "Nå er vi her 2");
+
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, "Nå er vi her 3");
+
                                 String title = document.getString("Title");
                                 Integer distance = (document.getLong("Distance").intValue());
 
@@ -59,7 +67,7 @@ public class FeedFragment extends Fragment {
 
                                 // det gikk fint
                                 //Toast.makeText(FeedActivity.this, "funket fint",Toast.LENGTH_SHORT).show();
-                                Log.d(TAG, "DokumentID: "+document.getId());
+
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -77,5 +85,19 @@ public class FeedFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
+    // forsøk på å få vist TokenID til bruker
+    public void showTokenId(){
+        String uId;
+        mUser = mAuth.getCurrentUser();
+        if(mUser != null){
+            uId = mUser.getUid();
+            Toast.makeText(getActivity(), "bruker-token er : " + uId  ,Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getActivity(), "bruker-token er : fant ikke "   ,Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
 
 }
