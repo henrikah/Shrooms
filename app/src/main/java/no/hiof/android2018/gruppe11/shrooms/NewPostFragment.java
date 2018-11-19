@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.GeolocationPermissions;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -53,6 +54,7 @@ public class NewPostFragment extends Fragment {
     View v;
     EditText title;
     EditText description;
+    Button postBtn;
 
 
     double latitude;
@@ -77,7 +79,7 @@ public class NewPostFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-        //hermansCamera();
+        hermansCamera();
         //createDummyData();
         //openCamera();
 
@@ -100,6 +102,18 @@ public class NewPostFragment extends Fragment {
         thumbnail = (Bitmap)data.getExtras().get("data");
         imageView = v.findViewById(R.id.thumbnailview);
         imageView.setImageBitmap(thumbnail);
+        postBtn = (Button) v.findViewById(R.id.button2);
+        postBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createPost();
+            }
+        });
+
+
+    }
+
+    public void createPost(){
         title = (EditText) v.findViewById(R.id.tittel);
         description = (EditText) v.findViewById(R.id.description);
 
@@ -113,10 +127,8 @@ public class NewPostFragment extends Fragment {
         String userUid = mUser.getUid();
 
         Post p = new Post(titleText,descText,userUid,timeStamp,geoPoint);
-
         //lagrePostIFireStore(p);
     }
-
 
     // Kode for å lagre bilde til Firebase Storage
     private void saveImageToDatabase(Bitmap bilde){
