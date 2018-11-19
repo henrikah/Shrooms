@@ -41,7 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.image.setImageResource(R.drawable.logo);
         viewHolder.title.setText(Posts.get(i).getTitle());
-        viewHolder.geoLocation.setText(Posts.get(i).getLocation().toString());
+        viewHolder.distance.setText(Posts.get(i).getLocation().toString());
         viewHolder.user.setText(Posts.get(i).getUser());
     }
 
@@ -55,7 +55,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ImageView image;
         TextView title;
         RelativeLayout feedLayout;
-        TextView geoLocation;
+        TextView distance;
         TextView user;
 
         public ViewHolder(@NonNull View itemView) {
@@ -63,7 +63,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             image = itemView.findViewById(R.id.feedItemImage);
             title = itemView.findViewById(R.id.feedItemTitle);
             feedLayout = itemView.findViewById(R.id.feedItemLayout);
-            geoLocation = itemView.findViewById(R.id.feedItemDistance);
+            distance = itemView.findViewById(R.id.feedItemDistance);
             user = itemView.findViewById(R.id.feedItemUser);
         }
     }
