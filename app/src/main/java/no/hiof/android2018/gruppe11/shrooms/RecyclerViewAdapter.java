@@ -41,7 +41,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.image.setImageResource(R.drawable.logo);
         viewHolder.title.setText(Posts.get(i).getTitle());
-        viewHolder.distance.setText(Posts.get(i).getDistance() + " Km");
         viewHolder.user.setText(Posts.get(i).getUser());
     }
 
