@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -30,6 +31,8 @@ public class FeedFragment extends Fragment {
     private static final String TAG = "FeedActivity";
     private ArrayList<Post> posts = new ArrayList<>();
     View v;
+    double latitude;
+    double longitude;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,7 +40,20 @@ public class FeedFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
         super.onCreate(savedInstanceState);
-        fillSoppList();
+        SingleShotLocationProvider.requestSingleUpdate(getContext(),
+                new SingleShotLocationProvider.LocationCallback() {
+                    @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
+                        latitude = location.latitude;
+                        longitude = location.longitude;
+
+                        fillSoppList();
+                    }
+        });
+
+
+
+
+
 
     }
 
@@ -59,12 +75,11 @@ public class FeedFragment extends Fragment {
 
                                 String title = document.getString("Title");
                                 Integer distance = (document.getLong("Distance").intValue());
-
+                                GeoPoint loc = document.getString("Location");
                                 String userName = document.getString("UserID");
                                 Long timeStamp = document.getLong("Timestamp");
                                 Post p = new Post(title,distance,userName,timeStamp);
                                 posts.add(p);
-
                                 // det gikk fint
                                 //Toast.makeText(FeedActivity.this, "funket fint",Toast.LENGTH_SHORT).show();
 
