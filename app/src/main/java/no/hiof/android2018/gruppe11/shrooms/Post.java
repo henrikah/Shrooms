@@ -28,13 +28,11 @@ public class Post {
 
 
         this.title = title;
-
+        this.description = description;
         this.user = user;
         this.timeStamp = timeStamp ;
         this.location = location;
         //this.bilde = bilde;
-
-
 
        // this.image = image;
 

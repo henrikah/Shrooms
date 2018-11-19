@@ -77,7 +77,8 @@ public class NewPostFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-       // createDummyData();
+        //hermansCamera();
+        //createDummyData();
         //openCamera();
 
     }
@@ -87,6 +88,11 @@ public class NewPostFragment extends Fragment {
         startActivity(intent);
         //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //startActivityForResult(takePictureIntent,0);
+    }
+
+    private void hermansCamera(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePictureIntent,0);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -157,7 +163,7 @@ public class NewPostFragment extends Fragment {
         Map<String, Object> postMap = new HashMap<>();
         postMap.put("Title", p.getTitle());
         postMap.put("Timestamp",p.getTimeStamp());
-        postMap.put("Description", p.description);
+        postMap.put("Description", p.getDescription());
         postMap.put("UserID", p.getUser());
         postMap.put("location",p.getLocation());
 
