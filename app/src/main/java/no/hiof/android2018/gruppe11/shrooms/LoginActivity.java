@@ -8,11 +8,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -69,6 +72,21 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (!task.isSuccessful()) {
+                            try
+                            {
+                                throw task.getException();
+                            }
+                            catch (FirebaseAuthInvalidUserException invalidEmail){
+                                Toast.makeText(LoginActivity.this, "Invalid Email" ,Toast.LENGTH_SHORT).show();
+                            }
+                            catch (FirebaseAuthInvalidCredentialsException wrongPassword){
+                                Toast.makeText(LoginActivity.this, "The password is wrong" ,Toast.LENGTH_SHORT).show();
+                            }
+                            catch (Exception e){
+                                Log.d(TAG, e.getMessage());
+                            }
+                        }
                         if (task.isSuccessful()) {
                             Log.d(TAG,"Fikk logget inn");
                             FirebaseUser user = mAuth.getCurrentUser();

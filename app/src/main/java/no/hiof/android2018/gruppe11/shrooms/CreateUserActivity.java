@@ -16,6 +16,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -70,12 +73,29 @@ public class CreateUserActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (!task.isSuccessful()) {
+                            try {
+                                throw task.getException();
+                            }
+                            catch (FirebaseAuthWeakPasswordException weakPassword){
+                               // Log.d(TAG, "password is too weak");
+                                Toast.makeText(CreateUserActivity.this, "password is too weak" ,Toast.LENGTH_SHORT).show();
+                            }
+                            catch (FirebaseAuthInvalidCredentialsException malformedEmail){
+                             //   Log.d(TAG, " Uncomplete email");
+                                Toast.makeText(CreateUserActivity.this, "Uncomplete email" ,Toast.LENGTH_SHORT).show();
+                            }
+                            catch (FirebaseAuthUserCollisionException existEmail){
+                               // Log.d(TAG, "The Email does already exist");
+                                Toast.makeText(CreateUserActivity.this, "The Email does already exist" ,Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                Log.d(TAG, e.getMessage());
+                            }
+                        }
                         if (task.isSuccessful()) {
                             saveUser();
 
                             signIn(emailTxt,passwordTxt);
-                        } else {
-
                         }
                     }
                 });
