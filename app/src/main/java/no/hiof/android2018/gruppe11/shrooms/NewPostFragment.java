@@ -96,12 +96,16 @@ public class NewPostFragment extends Fragment {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(takePictureIntent,0);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
         thumbnail = (Bitmap)data.getExtras().get("data");
         imageView = v.findViewById(R.id.thumbnailview);
         imageView.setImageBitmap(thumbnail);
+
+
+        saveImageToDatabase(thumbnail);
         postBtn = (Button) v.findViewById(R.id.button2);
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +136,7 @@ public class NewPostFragment extends Fragment {
 
     // Kode for å lagre bilde til Firebase Storage
     private void saveImageToDatabase(Bitmap bilde){
-        // Get the data from an ImageView as bytes
+        
 
         Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
 
@@ -177,7 +181,7 @@ public class NewPostFragment extends Fragment {
         postMap.put("Timestamp",p.getTimeStamp());
         postMap.put("Description", p.getDescription());
         postMap.put("UserID", p.getUser());
-        postMap.put("location",p.getLocation());
+        postMap.put("Location",p.getLocation());
 
         db.collection("Posts").document()
                 .set(postMap)
