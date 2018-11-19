@@ -55,7 +55,8 @@ public class NewPostFragment extends Fragment {
     EditText title;
     EditText description;
     Button postBtn;
-
+    long timeStamp;
+    String pictureID;
 
     double latitude;
     double longitude;
@@ -75,7 +76,9 @@ public class NewPostFragment extends Fragment {
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mushroomsRef = mStorageRef.child("mushrooms.png");
-        mushroomImagesRef = mStorageRef.child("brukerBilder/mushrooms.png");
+        long timeStamp = System.currentTimeMillis();
+        pictureID = "mushrooms_" + timeStamp + "_.png";
+        mushroomImagesRef = mStorageRef.child("brukerBilder/"+pictureID);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -123,7 +126,7 @@ public class NewPostFragment extends Fragment {
 
         String titleText = title.getText().toString();
         String descText = description.getText().toString();
-        long timeStamp = System.currentTimeMillis();
+
         GeoPoint geoPoint = updateLongLat();
 
 
@@ -131,12 +134,13 @@ public class NewPostFragment extends Fragment {
         String userUid = mUser.getUid();
 
         Post p = new Post(titleText,descText,userUid,timeStamp,geoPoint);
-        //lagrePostIFireStore(p);
+        p.setBildeNavn(pictureID);
+        lagrePostIFireStore(p);
     }
 
     // Kode for å lagre bilde til Firebase Storage
     private void saveImageToDatabase(Bitmap bilde){
-        
+
 
         Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
 
@@ -144,7 +148,9 @@ public class NewPostFragment extends Fragment {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] data = baos.toByteArray();
 
-        UploadTask uploadTask = mushroomsRef.putBytes(data);
+        // UploadTask uploadTask = mushroomsRef.putBytes(data);
+        UploadTask uploadTask = mushroomImagesRef.putBytes(data);
+
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
@@ -182,6 +188,7 @@ public class NewPostFragment extends Fragment {
         postMap.put("Description", p.getDescription());
         postMap.put("UserID", p.getUser());
         postMap.put("Location",p.getLocation());
+        postMap.put("bildeNavn",p.getBildeNavn());
 
         db.collection("Posts").document()
                 .set(postMap)

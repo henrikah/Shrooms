@@ -19,7 +19,7 @@ public class Post {
     public String description;
     public String user;
     public long timeStamp;
-    public Bitmap bilde;
+    public String bildeNavn;
     public GeoPoint location;
     
 
@@ -32,13 +32,18 @@ public class Post {
         this.user = user;
         this.timeStamp = timeStamp ;
         this.location = location;
-        //this.bilde = bilde;
-
-       // this.image = image;
 
 
     }
     /*LITEN ENDRING FOR Å SE OM NOE ENDRET SEG*/
+
+    public String getBildeNavn() {
+        return bildeNavn;
+    }
+
+    public void setBildeNavn(String bildeURL) {
+        this.bildeNavn = bildeURL;
+    }
 
     public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
@@ -60,13 +65,6 @@ public class Post {
         this.location = location;
     }
 
-    public Bitmap getBilde() {
-        return bilde;
-    }
-
-    public void setBilde(Bitmap bilde) {
-        this.bilde = bilde;
-    }
 
     public Long getTimeStamp() {
         return timeStamp;
