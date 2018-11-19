@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -25,12 +26,28 @@ public class FeedFragment extends Fragment {
     private static final String TAG = "FeedActivity";
     private ArrayList<Post> posts = new ArrayList<>();
     View v;
+    double latitude;
+    double longitude;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
         super.onCreate(savedInstanceState);
-        fillSoppList();
+        SingleShotLocationProvider.requestSingleUpdate(getContext(),
+                new SingleShotLocationProvider.LocationCallback() {
+                    @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
+                        latitude = location.latitude;
+                        longitude = location.longitude;
+
+                        fillSoppList();
+                    }
+        });
+
+
+
+
+
+
     }
 
     @Nullable
@@ -51,7 +68,7 @@ public class FeedFragment extends Fragment {
                                 Log.d(TAG, "Nå er vi her 3");
                                 String title = document.getString("Title");
                                 Integer distance = (document.getLong("Distance").intValue());
-
+                                GeoPoint loc = document.getString("Location");
                                 String userName = document.getString("UserID");
                                 Long timeStamp = document.getLong("Timestamp");
                                 Post p = new Post(title,distance,userName,timeStamp);
