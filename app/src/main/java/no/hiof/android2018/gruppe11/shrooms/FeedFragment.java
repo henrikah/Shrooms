@@ -77,7 +77,9 @@ public class FeedFragment extends Fragment {
                                 GeoPoint loc = document.getGeoPoint("Location");
                                 String userName = document.getString("UserID");
                                 Long timeStamp = document.getLong("Timestamp");
+                                String bildeNavn = document.getString("bildenNavn");
                                 Post p = new Post(title,desc,userName,timeStamp,loc);
+                                p.setBildeNavn(bildeNavn);
                                 posts.add(p);
                                 // det gikk fint
                                 //Toast.makeText(FeedActivity.this, "funket fint",Toast.LENGTH_SHORT).show();

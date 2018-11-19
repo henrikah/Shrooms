@@ -3,6 +3,7 @@ package no.hiof.android2018.gruppe11.shrooms;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
@@ -23,6 +32,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList<Post> Posts = new ArrayList<>();
     private Context mContext;
     private FirebaseFirestore db;
+    private StorageReference mStorageRef;
+    StorageReference mushroomImagesRef;
+    String pictureID;
+    private static final String TAG = "RecyclerViewAdapter";
+    FileDownloadTask.TaskSnapshot snapshot1;
+
+
 
     public RecyclerViewAdapter(ArrayList<Post> mPost, Context mContext) {
         this.Posts= mPost;
@@ -34,12 +50,46 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_feeditem, viewGroup, false);
         ViewHolder holder = new ViewHolder(view);
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+
+
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.image.setImageResource(R.drawable.logo);
+        pictureID = Posts.get(i).getBildeNavn();
+        mushroomImagesRef = mStorageRef.child("brukerBilder/"+pictureID);
+        String bildeNavnUtenJPG = pictureID.substring(0, pictureID.length() - 4);
+
+            try {
+                File localFile = File.createTempFile( bildeNavnUtenJPG, "png");
+                Log.d(TAG,"LocalFile funket fint.");
+                mStorageRef.getFile(localFile)
+                        .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+
+
+                                snapshot1 = taskSnapshot;
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle failed download
+                        // ...
+                    }
+                });
+            }
+            catch (IOException e){
+                e.getMessage();
+                Log.d(TAG,"LocalFile fikk feil");
+            }
+
+
+
+       // viewHolder.image.setImageResource();
+       // viewHolder.image.setImageResource(R.drawable.logo);
         viewHolder.title.setText(Posts.get(i).getTitle());
         viewHolder.distance.setText(Posts.get(i).getLocation().toString());
         viewHolder.user.setText(Posts.get(i).getUser());
