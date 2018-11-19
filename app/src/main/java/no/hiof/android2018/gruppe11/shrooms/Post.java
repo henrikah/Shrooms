@@ -9,26 +9,29 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Post {
     public String title;
-    public int distance;
+    public String description;
     public String user;
     public long timeStamp;
     public Bitmap bilde;
+    public GeoPoint location;
     
 
     //public Bitmap image;
-    public Post(String title, int distance, String user, Long timeStamp/*,Bitmap bilde*/){
+    public Post(String title, String description, String user, Long timeStamp, GeoPoint location){
 
 
         this.title = title;
-        this.distance = distance;
+
         this.user = user;
         this.timeStamp = timeStamp ;
+        this.location = location;
         //this.bilde = bilde;
 
 
@@ -41,6 +44,22 @@ public class Post {
 
     public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public GeoPoint getLocation() {
+        return location;
+    }
+
+    public void setLocation(GeoPoint location) {
+        this.location = location;
     }
 
     public Bitmap getBilde() {
@@ -67,13 +86,6 @@ public class Post {
         this.title = title;
     }
 
-    public int getDistance() {
-        return distance;
-    }
-
-    public void setDistance(int distance) {
-        this.distance = distance;
-    }
 
     public String getUser() {
         return user;

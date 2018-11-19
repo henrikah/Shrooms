@@ -73,10 +73,11 @@ public class FeedFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
                                 String title = document.getString("Title");
-                                Integer distance = (document.getLong("Distance").intValue());
+                                String desc = document.getString("Description");
+                                GeoPoint loc = document.getGeoPoint("Location");
                                 String userName = document.getString("UserID");
                                 Long timeStamp = document.getLong("Timestamp");
-                                Post p = new Post(title,distance,userName,timeStamp);
+                                Post p = new Post(title,desc,userName,timeStamp,loc);
                                 posts.add(p);
                                 // det gikk fint
                                 //Toast.makeText(FeedActivity.this, "funket fint",Toast.LENGTH_SHORT).show();

@@ -25,7 +25,7 @@ public class SingleShotLocationProvider {
         if (isNetworkEnabled) {
             Criteria criteria = new Criteria();
             criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             locationManager.requestSingleUpdate(criteria, new LocationListener() {
@@ -70,11 +70,6 @@ public class SingleShotLocationProvider {
     public static class GPSCoordinates {
         public float longitude = -1;
         public float latitude = -1;
-
-        public GPSCoordinates(float theLatitude, float theLongitude) {
-            longitude = theLongitude;
-            latitude = theLatitude;
-        }
 
         public GPSCoordinates(double theLatitude, double theLongitude) {
             longitude = (float) theLongitude;
