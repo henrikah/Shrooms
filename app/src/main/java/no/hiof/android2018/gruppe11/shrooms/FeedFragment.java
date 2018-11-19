@@ -40,14 +40,7 @@ public class FeedFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
         super.onCreate(savedInstanceState);
-        SingleShotLocationProvider.requestSingleUpdate(getContext(),
-                new SingleShotLocationProvider.LocationCallback() {
-                    @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
-                        latitude = location.latitude;
-                        longitude = location.longitude;
-                        fillSoppList();
-                    }
-        });
+        fillSoppList();
 
 
 

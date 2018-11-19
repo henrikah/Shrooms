@@ -23,6 +23,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList<Post> Posts = new ArrayList<>();
     private Context mContext;
     private FirebaseFirestore db;
+    double firLat;
+    double firLon;
 
     public RecyclerViewAdapter(ArrayList<Post> mPost, Context mContext) {
         this.Posts= mPost;
@@ -32,6 +34,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        SingleShotLocationProvider.requestSingleUpdate(mContext,
+                new SingleShotLocationProvider.LocationCallback() {
+                    @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
+                        firLat = location.latitude;
+                        firLon = location.longitude;
+                    }
+                });
+
+
+
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_feeditem, viewGroup, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
@@ -39,10 +51,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+
+
+
         viewHolder.image.setImageResource(R.drawable.logo);
         viewHolder.title.setText(Posts.get(i).getTitle());
-        viewHolder.distance.setText(Posts.get(i).getLocation().toString());
+
         viewHolder.user.setText(Posts.get(i).getUser());
+
+        double secLat = Posts.get(i).getLocation().getLatitude();
+        double secLon = Posts.get(i).getLocation().getLongitude();
+
+        double distance = (Math.sqrt(Math.pow((secLat - firLat),2) + Math.pow((secLon - firLon),2))) * 110.57;
+        viewHolder.distance.setText(distance + " Km");
     }
 
     @Override
