@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -36,11 +37,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NewPostFragment extends Fragment {
     private StorageReference mStorageRef;
     private FirebaseAuth mAuth;
     FirebaseUser mUser;
+    private FirebaseFirestore db;
+
     StorageReference mushroomsRef;
     StorageReference mushroomImagesRef;
     ImageView imageView;
@@ -70,9 +75,10 @@ public class NewPostFragment extends Fragment {
         mushroomsRef = mStorageRef.child("mushrooms.png");
         mushroomImagesRef = mStorageRef.child("brukerBilder/mushrooms.png");
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        openCamera();
+       // createDummyData();
+        //openCamera();
 
     }
 
@@ -93,16 +99,20 @@ public class NewPostFragment extends Fragment {
 
         String titleText = title.getText().toString();
         String descText = description.getText().toString();
+        long timeStamp = System.currentTimeMillis();
+        GeoPoint geoPoint = updateLongLat();
 
 
         mUser = mAuth.getCurrentUser();
         String userUid = mUser.getUid();
-        Post p = new Post(titleText,descText,userUid,System.currentTimeMillis(),updateLongLat());
 
+        Post p = new Post(titleText,descText,userUid,timeStamp,geoPoint);
 
+        //lagrePostIFireStore(p);
     }
 
 
+    // Kode for å lagre bilde til Firebase Storage
     private void saveImageToDatabase(Bitmap bilde){
         // Get the data from an ImageView as bytes
 
@@ -129,7 +139,6 @@ public class NewPostFragment extends Fragment {
 
 
     public GeoPoint updateLongLat(){
-
         SingleShotLocationProvider.requestSingleUpdate(getContext(),
                 new SingleShotLocationProvider.LocationCallback() {
                     @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
@@ -143,89 +152,50 @@ public class NewPostFragment extends Fragment {
 
     }
 
-    /* public void uploadLocalFile(){
+    public void lagrePostIFireStore(Post p){
 
-        Uri file = Uri.fromFile(new File("C:/Users/Marius/Desktop/Shrooms/app/src/main/res/drawable/logo.png"));
-        StorageReference riversRef = mStorageRef.child("brukerBilder/"+file.getLastPathSegment());
-        UploadTask uploadTask = riversRef.putFile(file);
+        Map<String, Object> postMap = new HashMap<>();
+        postMap.put("Title", p.getTitle());
+        postMap.put("Timestamp",p.getTimeStamp());
+        postMap.put("Description", p.description);
+        postMap.put("UserID", p.getUser());
+        postMap.put("location",p.getLocation());
 
-// Register observers to listen for when the download is done or if it fails
-        uploadTask.addOnFailureListener(new OnFailureListener() {
+        db.collection("Posts").document()
+                .set(postMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getActivity(),"Post registrert",Toast.LENGTH_SHORT).show();                    }
+                }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
-            }
-        });
-    }*/
-
-
-
-
-
-
-
-  //  C:\Users\Marius\Desktop\Shrooms\app\src\main\res\drawable\logo.png
-//
-
-
-    /*// forsøk på å laste opp bilde fra stream
-    public void SaveImgToDbFromStream(){
-        Log.d(TAG,"TEST: ingorer denne");
-        InputStream stream = null;
-        try {
-            stream = new FileInputStream(new File("C:/Users/Marius/Desktop/Shrooms/app/src/main/res/drawable/logo.png"));
-            Toast.makeText(getActivity(), "TEST: Fant filen.", Toast.LENGTH_SHORT).show();
-            Log.d(TAG,"TEST: Fant filen");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Toast.makeText(getActivity(), "Finner ikke filen.", Toast.LENGTH_SHORT).show();
-            Log.d(TAG,"TEST: Finner ikke filen");
-        }
-
-        Log.d(TAG, "TEST: Dette kjører 12345");
-        UploadTask uploadTask = mushroomsRef.putStream(stream);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.d(TAG, "TEST: Det feilet");
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
-                Log.d(TAG, "TEST: Det feilet ikke");
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
-    }*/
 
-    // Kode for å lagre et bilde lokalt *** Start **
+    }
 
-     /*String mCurrentPhotoPath;
+    // Bare for å fylle databasen med dritt
+    public void createDummyData(){
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "PNG_" + timeStamp + "_";
+        long timeStamp = System.currentTimeMillis();
+        GeoPoint geoPoint = updateLongLat();
 
-        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        Post p1 = new Post("Tittel1","description1","KåreId", timeStamp, geoPoint);
+        Post p2 = new Post("Tittel2","description2","KnutId", timeStamp, geoPoint);
+        Post p3 = new Post("Tittel3","description3","PerId", timeStamp, geoPoint);
+        Post p4 = new Post("Tittel4","description4","EgilId", timeStamp, geoPoint);
 
-        File image = File.createTempFile(
-                imageFileName,  *//* prefix *//*
-                ".png",         *//* suffix *//*
-                storageDir      *//* directory *//*
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
-    }*/
-
-    // Kode for å lagre et bilde lokalt *** Slutt **
+        lagrePostIFireStore(p1);
+        lagrePostIFireStore(p2);
+        lagrePostIFireStore(p3);
+        lagrePostIFireStore(p4);
+    }
 }
+
+
+
+
+
+
