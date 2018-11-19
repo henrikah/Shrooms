@@ -1,10 +1,13 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -39,7 +42,6 @@ public class bottomNavTest extends AppCompatActivity {
                             break;
                         case R.id.nav_map:
                             Toast.makeText(bottomNavTest.this, "Opening maps...", Toast.LENGTH_LONG).show();
-                            break;
                         case R.id.nav_my_profile:
                             selectedFragment = new MyProfileFragment();
                             break;
