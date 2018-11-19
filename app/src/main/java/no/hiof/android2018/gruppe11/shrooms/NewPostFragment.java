@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -36,11 +37,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NewPostFragment extends Fragment {
     private StorageReference mStorageRef;
     private FirebaseAuth mAuth;
     FirebaseUser mUser;
+    private FirebaseFirestore db;
+
     StorageReference mushroomsRef;
     StorageReference mushroomImagesRef;
     ImageView imageView;
@@ -70,6 +75,7 @@ public class NewPostFragment extends Fragment {
         mushroomsRef = mStorageRef.child("mushrooms.png");
         mushroomImagesRef = mStorageRef.child("brukerBilder/mushrooms.png");
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
 
         openCamera();
@@ -93,16 +99,39 @@ public class NewPostFragment extends Fragment {
 
         String titleText = title.getText().toString();
         String descText = description.getText().toString();
+        long timeStamp = System.currentTimeMillis();
+        GeoPoint geoPoint = updateLongLat();
 
 
         mUser = mAuth.getCurrentUser();
         String userUid = mUser.getUid();
-        Post p = new Post(titleText,descText,userUid,System.currentTimeMillis(),updateLongLat());
 
+        Post p = new Post(titleText,descText,userUid,timeStamp,geoPoint);
 
+        // Lagrer post objectet i databasen ** Start **
+        Map<String, Object> postMap = new HashMap<>();
+        postMap.put("Title", titleText);
+        postMap.put("Timestamp",timeStamp);
+        postMap.put("Description", descText);
+        postMap.put("UserID", userUid);
+        postMap.put("location",geoPoint);
+
+        db.collection("Posts").document()
+                .set(postMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getActivity(),"Post registrert",Toast.LENGTH_SHORT).show();                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+        // Lagrer post objectet i databasen ** Slutt**
 
-
+    // Kode for å lagre bilde til Firebase Storage
     private void saveImageToDatabase(Bitmap bilde){
         // Get the data from an ImageView as bytes
 
@@ -129,7 +158,6 @@ public class NewPostFragment extends Fragment {
 
 
     public GeoPoint updateLongLat(){
-
         SingleShotLocationProvider.requestSingleUpdate(getContext(),
                 new SingleShotLocationProvider.LocationCallback() {
                     @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
