@@ -14,11 +14,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.GeolocationPermissions;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -34,11 +39,20 @@ import java.util.Date;
 
 public class NewPostFragment extends Fragment {
     private StorageReference mStorageRef;
+    private FirebaseAuth mAuth;
+    FirebaseUser mUser;
     StorageReference mushroomsRef;
     StorageReference mushroomImagesRef;
     ImageView imageView;
     Bitmap thumbnail;
     View v;
+    EditText title;
+    EditText description;
+
+
+    double latitude;
+    double longitude;
+
     private static final String TAG = "FeedFragment";
 
     @Nullable
@@ -51,6 +65,12 @@ public class NewPostFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        mushroomsRef = mStorageRef.child("mushrooms.png");
+        mushroomImagesRef = mStorageRef.child("brukerBilder/mushrooms.png");
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
 
         openCamera();
 
@@ -68,11 +88,16 @@ public class NewPostFragment extends Fragment {
         thumbnail = (Bitmap)data.getExtras().get("data");
         imageView = v.findViewById(R.id.thumbnailview);
         imageView.setImageBitmap(thumbnail);
+        title = (EditText) v.findViewById(R.id.tittel);
+        description = (EditText) v.findViewById(R.id.description);
+
+        String titleText = title.getText().toString();
+        String descText = description.getText().toString();
 
 
-        mStorageRef = FirebaseStorage.getInstance().getReference();
-        mushroomsRef = mStorageRef.child("mushrooms.png");
-        mushroomImagesRef = mStorageRef.child("brukerBilder/mushrooms.png");
+        mUser = mAuth.getCurrentUser();
+        String userUid = mUser.getUid();
+        Post p = new Post(titleText,descText,userUid,System.currentTimeMillis(),updateLongLat());
 
 
     }
@@ -103,7 +128,22 @@ public class NewPostFragment extends Fragment {
     }
 
 
-   /* public void uploadLocalFile(){
+    public GeoPoint updateLongLat(){
+
+        SingleShotLocationProvider.requestSingleUpdate(getContext(),
+                new SingleShotLocationProvider.LocationCallback() {
+                    @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
+                        latitude = location.latitude;
+                        longitude = location.longitude;
+
+                    }
+                });
+        GeoPoint geoPoint = new GeoPoint(latitude,longitude);
+        return geoPoint;
+
+    }
+
+    /* public void uploadLocalFile(){
 
         Uri file = Uri.fromFile(new File("C:/Users/Marius/Desktop/Shrooms/app/src/main/res/drawable/logo.png"));
         StorageReference riversRef = mStorageRef.child("brukerBilder/"+file.getLastPathSegment());
