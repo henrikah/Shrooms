@@ -81,8 +81,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         https://console.firebase.google.com/project/shrooms-462ab/storage/shrooms-462ab.appspot.com/files~2FbrukerBilder~2F
         pictureID = Posts.get(i).getBildeNavn();
-       // final ViewHolder viewHolder2 = viewHolder;
-        //mushroomImagesRef = mStorageRef.child("brukerBilder/"+pictureID);
+        final ViewHolder viewHolder2 = viewHolder;
+        mushroomImagesRef = mStorageRef.child("brukerBilder/"+pictureID);
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
         String bildeNavnUtenJPG = pictureID.substring(0, pictureID.length() - 4);
@@ -103,7 +103,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
 
-            try {
+            /*try {
                 final File localFile = File.createTempFile(bildeNavnUtenJPG, "png");
 
                 final ViewHolder viewHolder2 = viewHolder;
@@ -113,7 +113,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             @Override
                             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
 
-                              //  viewHolder2.image.setImageResource(localFile);
+                                viewHolder2.image.setImageResource(localFile);
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                     @Override
