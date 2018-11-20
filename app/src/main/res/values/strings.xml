@@ -5,4 +5,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="jens">Jens</string>
+    <string name="jensen">Jensen</string>
+    <string name="nope_nix_no">nope@nix.no</string>
+    <string name="profilbilde">profilbilde</string>
 </resources>
