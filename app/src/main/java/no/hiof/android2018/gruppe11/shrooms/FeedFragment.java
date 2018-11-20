@@ -87,10 +87,16 @@ public class FeedFragment extends Fragment {
 
     }
     private void initRecyclerView(){
-        RecyclerView recyclerView = v.findViewById(R.id.mainFeed);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(posts,getActivity());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        SingleShotLocationProvider.requestSingleUpdate(getContext(),
+                new SingleShotLocationProvider.LocationCallback() {
+                    @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
+                        RecyclerView recyclerView = v.findViewById(R.id.mainFeed);
+                        RecyclerViewAdapter adapter = new RecyclerViewAdapter(posts,getActivity(),location.latitude,location.longitude);
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    }
+                });
     }
 
     // forsøk på å få vist TokenID til bruker
