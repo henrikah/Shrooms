@@ -1,7 +1,6 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,7 +34,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private FirebaseFirestore db;
 
     private StorageReference mStorageRef;
-    StorageReference httpsReference;
     StorageReference mushroomImagesRef;
     String pictureID;
     private static final String TAG = "RecyclerViewAdapter";
@@ -45,10 +42,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     double firLat;
     double firLon;
-
-
-    //Db forsøk 2
-
 
 
     public RecyclerViewAdapter(ArrayList<Post> mPost, Context mContext) {
@@ -71,56 +64,35 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_feeditem, viewGroup, false);
         ViewHolder holder = new ViewHolder(view);
-
+        mStorageRef = FirebaseStorage.getInstance().getReference();
 
 
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
-        https://console.firebase.google.com/project/shrooms-462ab/storage/shrooms-462ab.appspot.com/files~2FbrukerBilder~2F
-        pictureID = Posts.get(i).getBildeNavn();
-        final ViewHolder viewHolder2 = viewHolder;
-        mushroomImagesRef = mStorageRef.child("brukerBilder/"+pictureID);
-        mStorageRef = FirebaseStorage.getInstance().getReference();
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
+        pictureID = Posts.get(i).getBildeNavn();
+        mushroomImagesRef = mStorageRef.child("brukerBilder/"+pictureID);
         String bildeNavnUtenJPG = pictureID.substring(0, pictureID.length() - 4);
 
-
-        mStorageRef.child("brukerBilder/"+pictureID).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                String imgURL = uri.toString();
-                Glide.with( viewHolder.image).load(imgURL).into(viewHolder.image);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        });
-
-
-
-            /*try {
-                final File localFile = File.createTempFile(bildeNavnUtenJPG, "png");
-
-                final ViewHolder viewHolder2 = viewHolder;
+            try {
+                File localFile = File.createTempFile( bildeNavnUtenJPG, "png");
                 Log.d(TAG,"LocalFile funket fint.");
                 mStorageRef.getFile(localFile)
                         .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
 
-                                viewHolder2.image.setImageResource(localFile);
+
+                                snapshot1 = taskSnapshot;
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
                         // Handle failed download
                         // ...
-
                     }
                 });
             }
@@ -130,7 +102,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
 
 
-
+            
        // viewHolder.image.setImageResource();
        // viewHolder.image.setImageResource(R.drawable.logo);
 
