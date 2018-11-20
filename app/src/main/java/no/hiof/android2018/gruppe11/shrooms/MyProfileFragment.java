@@ -45,7 +45,7 @@ public class MyProfileFragment extends Fragment {
         //text = getView().findViewById(R.id.myProfileText);
         //text.setText(currentUser.getEmail());
 
-        fragment = new MyInfoFragment();
+        fragment = new MyPostFragment();
         fragmentTransaction = this.getChildFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.myLayout, fragment).commit();
 
