@@ -73,40 +73,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
-        /*pictureID = Posts.get(i).getBildeNavn();
-        mushroomImagesRef = mStorageRef.child("brukerBilder/"+pictureID);
-        String bildeNavnUtenJPG = pictureID.substring(0, pictureID.length() - 4);
-
-            try {
-                File localFile = File.createTempFile( bildeNavnUtenJPG, "png");
-                Log.d(TAG,"LocalFile funket fint.");
-                mStorageRef.getFile(localFile)
-                        .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-
-
-                                snapshot1 = taskSnapshot;
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle failed download
-                        // ...
-                    }
-                });
-            }
-            catch (IOException e){
-                e.getMessage();
-                Log.d(TAG,"LocalFile fikk feil");
-            }
-
-
-            */
-       // viewHolder.image.setImageResource();
-       // viewHolder.image.setImageResource(R.drawable.logo);
-
-
 
 
         viewHolder.image.setImageResource(R.drawable.logo);
