@@ -73,7 +73,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
-        /*pictureID = Posts.get(i).getBildeNavn();
+        pictureID = Posts.get(i).getBildeNavn();
         mushroomImagesRef = mStorageRef.child("brukerBilder/"+pictureID);
         String bildeNavnUtenJPG = pictureID.substring(0, pictureID.length() - 4);
 
@@ -102,7 +102,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
 
 
-            */
+
        // viewHolder.image.setImageResource();
        // viewHolder.image.setImageResource(R.drawable.logo);
 
