@@ -127,7 +127,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             catch (IOException e){
                 e.getMessage();
                 Log.d(TAG,"LocalFile fikk feil");
-            }*/
+            }
 
 
 
