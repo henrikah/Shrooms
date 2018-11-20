@@ -14,7 +14,7 @@ import com.google.firebase.firestore.GeoPoint;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Post  {
+public class Post {
     public String title;
     public String description;
     public String user;
@@ -90,9 +90,6 @@ public class Post  {
     public void setUser(String user) {
         this.user = user;
     }
-
-
-
 /*
     public Bitmap getImage() {
         return image;
