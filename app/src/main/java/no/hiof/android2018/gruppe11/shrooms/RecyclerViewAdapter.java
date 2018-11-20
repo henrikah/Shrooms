@@ -67,8 +67,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     }
                 });
 
+
+
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_feeditem, viewGroup, false);
         ViewHolder holder = new ViewHolder(view);
+
+
 
         return holder;
     }
@@ -83,7 +87,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         String bildeNavnUtenJPG = pictureID.substring(0, pictureID.length() - 4);
 
-/*
+
         mStorageRef.child("brukerBilder/"+pictureID).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -97,9 +101,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
-*/
 
-           /* try {
+
+            try {
                 final File localFile = File.createTempFile(bildeNavnUtenJPG, "png");
 
                 final ViewHolder viewHolder2 = viewHolder;
@@ -124,7 +128,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 e.getMessage();
                 Log.d(TAG,"LocalFile fikk feil");
             }
-*/
+
 
 
        // viewHolder.image.setImageResource();
