@@ -25,6 +25,7 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
@@ -84,7 +85,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         double secLon = Posts.get(i).getLocation().getLongitude();
 
         double distance = (Math.sqrt(Math.pow((secLat - firLat),2) + Math.pow((secLon - firLon),2))) * 110.57;
-        viewHolder.distance.setText(distance + " Km");
+
+        viewHolder.distance.setText(new DecimalFormat("#.##").format(distance) + " Km");
+
     }
 
     @Override

@@ -110,10 +110,19 @@ public class NewPostFragment extends Fragment {
 
         saveImageToDatabase(thumbnail);
         postBtn = (Button) v.findViewById(R.id.button2);
+
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createPost();
+                SingleShotLocationProvider.requestSingleUpdate(getContext(),
+                        new SingleShotLocationProvider.LocationCallback() {
+                            @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
+                                latitude = location.latitude;
+                                longitude = location.longitude;
+                                createPost();
+                            }
+                        });
+
             }
         });
 
@@ -127,7 +136,7 @@ public class NewPostFragment extends Fragment {
         String titleText = title.getText().toString();
         String descText = description.getText().toString();
 
-        GeoPoint geoPoint = updateLongLat();
+        GeoPoint geoPoint = new GeoPoint(latitude,longitude);;
 
 
         mUser = mAuth.getCurrentUser();
