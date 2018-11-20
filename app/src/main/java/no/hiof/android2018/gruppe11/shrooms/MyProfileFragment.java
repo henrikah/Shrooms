@@ -16,9 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 
 public class MyProfileFragment extends Fragment {
-    private TextView text;
-    private FirebaseAuth mAuth;
-    FirebaseUser currentUser;
+
     FragmentTransaction fragmentTransaction;
     Fragment fragment;
     ImageButton infoButton;
@@ -28,8 +26,7 @@ public class MyProfileFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
+
 
     }
 
@@ -42,10 +39,9 @@ public class MyProfileFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //text = getView().findViewById(R.id.myProfileText);
-        //text.setText(currentUser.getEmail());
 
-        fragment = new MyInfoFragment();
+
+        fragment = new MyPostFragment();
         fragmentTransaction = this.getChildFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.myLayout, fragment).commit();
 
