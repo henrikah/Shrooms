@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import no.hiof.android2018.gruppe11.shrooms.map.MapTestActivity;
+
 public class bottomNavTest extends AppCompatActivity {
 
     @Override
@@ -37,11 +39,10 @@ public class bottomNavTest extends AppCompatActivity {
                         case R.id.nav_new_post:
                             selectedFragment = new NewPostFragment();
                             break;
-                        case R.id.nav_my_posts:
-                            selectedFragment = new MyPostFragment();
-                            break;
                         case R.id.nav_map:
                             Toast.makeText(bottomNavTest.this, "Opening maps...", Toast.LENGTH_LONG).show();
+                            Intent myIntent = new Intent(bottomNavTest.this, MapTestActivity.class);
+                            startActivity(myIntent);
 
                         case R.id.nav_my_profile:
                             selectedFragment = new MyProfileFragment();

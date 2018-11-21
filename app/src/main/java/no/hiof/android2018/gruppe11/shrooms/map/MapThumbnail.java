@@ -15,11 +15,11 @@ public class MapThumbnail implements OnMapReadyCallback {
     private LatLng mPosition;
     private int mZoom = 15;
 
-    MapThumbnail(double lat, double lng) {
+    public MapThumbnail(double lat, double lng) {
         mPosition = new LatLng(lat, lng);
     }
     // Med egen zoom
-    MapThumbnail(double lat, double lng, int zoom) {
+    public MapThumbnail(double lat, double lng, int zoom) {
         mPosition = new LatLng(lat, lng);
         mZoom = zoom;
     }

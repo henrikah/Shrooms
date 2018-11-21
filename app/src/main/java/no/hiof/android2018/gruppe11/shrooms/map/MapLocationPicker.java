@@ -18,7 +18,7 @@ public class MapLocationPicker implements OnMapReadyCallback {
     private Marker mMarker;
 
     private double lat, lng;
-    MapLocationPicker(double lat, double lng) {
+    public MapLocationPicker(double lat, double lng) {
         mPosition = new LatLng(lat, lng);
     }
     // Med egen zoom

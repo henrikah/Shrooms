@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,7 +26,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CreateUserActivity extends AppCompatActivity {
+import no.hiof.android2018.gruppe11.shrooms.enumerator.LocationModalEnumerator;
+import no.hiof.android2018.gruppe11.shrooms.map.MapLocationPicker;
+import no.hiof.android2018.gruppe11.shrooms.map.MapThumbnail;
+
+public class CreateUserActivity extends AppCompatActivity implements ItemListDialogFragment.Listener {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -37,28 +42,52 @@ public class CreateUserActivity extends AppCompatActivity {
     private EditText lastname;
 
     private Button btn;
+    private Button selectHomeLocationButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_user);
 
-        email = (EditText) findViewById(R.id.editTextEmail);
-        password = (EditText) findViewById(R.id.editTextPassword);
-        firstname = (EditText) findViewById(R.id.editTextFirstname);
-        lastname = (EditText) findViewById(R.id.editTextLastname);
+        email = findViewById(R.id.editTextEmail);
+        password = findViewById(R.id.editTextPassword);
+        firstname = findViewById(R.id.editTextFirstname);
+        lastname = findViewById(R.id.editTextLastname);
 
-        btn = (Button) findViewById(R.id.button);
-
+        btn = findViewById(R.id.button);
+        selectHomeLocationButton = findViewById(R.id.selectHomeLocationButton);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-
+        /*
+            Viser standard kart uten merke
+         */
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(new MapThumbnail(59.5953, 10.4000, 10));
+        if(getIntent().getExtras() != null) {
+            Log.d("register", "getExtra != null");
+            if(getIntent().getExtras().getString("email") != null) {
+                Log.d("register", "getExtra.getstring != null");
+                email.setText(getIntent().getExtras().getString("email"));
+            }
+        }
+        selectHomeLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ItemListDialogFragment.newInstance(2).show(getSupportFragmentManager(), "LocationTypeSelector");
+            }
+        });
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Register();
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
 
     }
 
@@ -159,4 +188,12 @@ public class CreateUserActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemClicked(int position) {
+        if(position == 0) {
+            // Har valgt kart
+        } else if(position == 1) {
+            // Har valgt å bruke locationservice
+        }
+    }
 }
