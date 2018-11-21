@@ -71,7 +71,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         viewHolder.title.setText(Posts.get(i).getTitle());
 
-        viewHolder.user.setText(Posts.get(i).getUser());
+        viewHolder.user.setText(Posts.get(i).getUser().substring(0,10));
 
 
         double secLat = Posts.get(i).getLocation().getLatitude();
