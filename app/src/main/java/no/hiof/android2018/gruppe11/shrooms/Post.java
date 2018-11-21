@@ -33,6 +33,16 @@ public class Post {
         this.timeStamp = timeStamp ;
         this.location = location;
 
+    }
+    public Post(String title, String description, String user, Long timeStamp, GeoPoint location, String bildeNavn){
+
+
+        this.title = title;
+        this.description = description;
+        this.user = user;
+        this.timeStamp = timeStamp ;
+        this.location = location;
+        this.bildeNavn = bildeNavn;
 
     }
     /*LITEN ENDRING FOR Å SE OM NOE ENDRET SEG*/
