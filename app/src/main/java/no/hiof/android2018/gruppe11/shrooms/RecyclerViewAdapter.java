@@ -1,6 +1,7 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
 import android.content.Context;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Debug;
 import android.support.annotation.NonNull;
