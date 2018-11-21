@@ -4,7 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,19 +20,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String TAG = LoginActivity.class.getName();
+
     private EditText email;
     private EditText password;
-    private static final String TAG = LoginActivity.class.getName();
-    private FirebaseFirestore db;
-
     private Button btnSignIn;
     private Button btnSignUp;
-
     private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,37 +36,76 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
 
-        email = (EditText) findViewById(R.id.emailSignIn);
-        password = (EditText) findViewById(R.id.passwordSignIn);
+        email = findViewById(R.id.emailSignIn);
+        password = findViewById(R.id.passwordSignIn);
 
-        btnSignIn = (Button) findViewById(R.id.SignInBtn);
-        btnSignUp = (Button) findViewById(R.id.SignUpntn) ;
+        btnSignIn = findViewById(R.id.SignInBtn);
+        btnSignUp = findViewById(R.id.SignUpntn);
+        /*
+            Textwatcher for å sjekke at E-post er gyldig og at et passord er skrevet inn
+         */
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        // Knapp for å logge inn
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                /*
+                    Sjekker at E-posten er gyldig og at det skrevet inn et passord før vi skrur på logg inn knappen.
+                 */
+                if(Patterns.EMAIL_ADDRESS.matcher(email.getText()).matches() && !TextUtils.isEmpty(password.getText())) {
+                    btnSignIn.setEnabled(true);
+                } else {
+                    btnSignIn.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+        btnSignIn.setEnabled(false);
+        email.addTextChangedListener(textWatcher);
+        password.addTextChangedListener(textWatcher);
+        /*
+            Trykkbar knapp for å logge inn
+         */
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String emailTxt = email.getText().toString().trim();
-                String passwordTxt = password.getText().toString().trim();
+                String emailTxt = email.getText().toString();
+                String passwordTxt = password.getText().toString();
 
                 signIn(emailTxt,passwordTxt);
             }
         });
 
-        // Knapp som sender deg til registrerings activityen
+        /*
+            Knapp som sender deg til registrerings activityen
+         */
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(LoginActivity.this, CreateUserActivity.class);
+                /*
+                    Sender e-postadressen som er skrevet inn til registreringsaktiviteten dersom det er en gyldig E-post
+                 */
+                if(Patterns.EMAIL_ADDRESS.matcher(email.getText()).matches()) {
+                    myIntent.putExtra("email", email.getText().toString());
+                }
                 startActivity(myIntent);
             }
         });
 
     }
 
-    // Metoden som logger deg inn, og sender deg vicdere til Feed activityen
+    /*
+        Metoden som logger deg inn, og sender deg videre til Feed activityen
+     */
     public void signIn(String email,String password){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -77,11 +116,8 @@ public class LoginActivity extends AppCompatActivity {
                             {
                                 throw task.getException();
                             }
-                            catch (FirebaseAuthInvalidUserException invalidEmail){
-                                Toast.makeText(LoginActivity.this, "Invalid Email" ,Toast.LENGTH_SHORT).show();
-                            }
-                            catch (FirebaseAuthInvalidCredentialsException wrongPassword){
-                                Toast.makeText(LoginActivity.this, "The password is wrong" ,Toast.LENGTH_SHORT).show();
+                            catch (FirebaseAuthInvalidUserException | FirebaseAuthInvalidCredentialsException invalidCredentials){
+                                Toast.makeText(LoginActivity.this, "Invalid E-mail or password" ,Toast.LENGTH_SHORT).show();
                             }
                             catch (Exception e){
                                 Log.d(TAG, e.getMessage());
@@ -89,18 +125,15 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         if (task.isSuccessful()) {
                             Log.d(TAG,"Fikk logget inn");
-                            FirebaseUser user = mAuth.getCurrentUser();
 
-                             Intent myIntent = new Intent(LoginActivity.this, bottomNavTest.class);
+                            Intent myIntent = new Intent(LoginActivity.this, bottomNavTest.class);
                             startActivity(myIntent);
 
                         } else {
                             Log.d(TAG,"Fikk ikke logget inn");
-
+                            Toast.makeText(LoginActivity.this, "An error occured. Try again" ,Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
-
-
 }

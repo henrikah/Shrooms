@@ -18,24 +18,24 @@ public class MapWithPosts implements OnMapReadyCallback {
     private LatLng mPosition;
     private ArrayList<MapPostMarker> mapPostMarkers;
     private int mZoom = 10;
-    MapWithPosts(double lat, double lng, ArrayList<MapPostMarker> posts) {
+    public MapWithPosts(double lat, double lng, ArrayList<MapPostMarker> posts) {
         mPosition = new LatLng(lat, lng);
         mapPostMarkers = posts;
     }
     // Med egen zoom
-    MapWithPosts(double lat, double lng, ArrayList<MapPostMarker> posts, int zoom) {
+    public MapWithPosts(double lat, double lng, ArrayList<MapPostMarker> posts, int zoom) {
         mPosition = new LatLng(lat, lng);
         mapPostMarkers = posts;
         mZoom = zoom;
     }
     // Med kun en post uten zoom
-    MapWithPosts(double lat, double lng, MapPostMarker post) {
+    public MapWithPosts(double lat, double lng, MapPostMarker post) {
         mPosition = new LatLng(lat, lng);
         mapPostMarkers = new ArrayList<>();
         mapPostMarkers.add(post);
     }
     // Med kun en post med zoom
-    MapWithPosts(double lat, double lng, MapPostMarker post, int zoom) {
+    public MapWithPosts(double lat, double lng, MapPostMarker post, int zoom) {
         mPosition = new LatLng(lat, lng);
         mapPostMarkers = new ArrayList<>();
         mapPostMarkers.add(post);
