@@ -1,6 +1,7 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
 import android.content.Context;
+import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class MyPostsRecycler extends RecyclerView.Adapter<MyPostsRecycler.ViewHolder>{
@@ -34,24 +36,16 @@ public class MyPostsRecycler extends RecyclerView.Adapter<MyPostsRecycler.ViewHo
     double firLon;
 
 
-    public MyPostsRecycler(ArrayList<Post> mPost, Context mContext) {
+    public MyPostsRecycler(ArrayList<Post> mPost, Context mContext, double firLat, double firLon) {
         this.Posts= mPost;
         this.mContext = mContext;
+        this.firLat = firLat;
+        this.firLon = firLon;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        SingleShotLocationProvider.requestSingleUpdate(mContext,
-                new SingleShotLocationProvider.LocationCallback() {
-                    @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
-                        firLat = location.latitude;
-                        firLon = location.longitude;
-                    }
-                });
-
-
-
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_postitem, viewGroup, false);
         ViewHolder holder = new ViewHolder(view);
         mStorageRef = FirebaseStorage.getInstance().getReference();
@@ -68,8 +62,17 @@ public class MyPostsRecycler extends RecyclerView.Adapter<MyPostsRecycler.ViewHo
         double secLat = Posts.get(i).getLocation().getLatitude();
         double secLon = Posts.get(i).getLocation().getLongitude();
 
-        double distance = (Math.sqrt(Math.pow((secLat - firLat),2) + Math.pow((secLon - firLon),2))) * 110.57;
-        viewHolder.distance.setText(distance + " Km");
+        Location oldLoc = new Location("oldLoc");
+        oldLoc.setLatitude(firLat);
+        oldLoc.setLongitude(firLon);
+
+        Location newLoc = new Location("newLoc");
+        newLoc.setLatitude(secLat);
+        newLoc.setLongitude(secLon);
+        double distance = (Math.sqrt(Math.pow((secLat - firLat),2) + Math.pow((secLon - firLon),2))) * 83.57;
+
+
+        viewHolder.distance.setText((new DecimalFormat("#.#").format(oldLoc.distanceTo(newLoc) / 1000) ) + " Km");
     }
 
     @Override

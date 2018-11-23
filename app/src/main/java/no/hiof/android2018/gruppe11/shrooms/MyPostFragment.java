@@ -77,13 +77,18 @@ public class MyPostFragment extends Fragment {
                 initRecyclerView();
             }
         });
-
     }
     private void initRecyclerView(){
-        RecyclerView recyclerView = view.findViewById(R.id.myPostsRecycler);
-        MyPostsRecycler adapter = new MyPostsRecycler(posts,getActivity());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
+        SingleShotLocationProvider.requestSingleUpdate(getContext(),
+                new SingleShotLocationProvider.LocationCallback() {
+                    @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
+                        RecyclerView recyclerView = view.findViewById(R.id.myPostsRecycler);
+                        MyPostsRecycler adapter = new MyPostsRecycler(posts,getActivity(),location.latitude,location.longitude);
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+                    }
+                });
     }
 
 

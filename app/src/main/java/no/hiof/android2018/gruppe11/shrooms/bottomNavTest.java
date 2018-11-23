@@ -43,7 +43,6 @@ public class bottomNavTest extends AppCompatActivity {
                             Toast.makeText(bottomNavTest.this, "Opening maps...", Toast.LENGTH_LONG).show();
                             Intent myIntent = new Intent(bottomNavTest.this, MapTestActivity.class);
                             startActivity(myIntent);
-
                         case R.id.nav_my_profile:
                             selectedFragment = new MyProfileFragment();
                             break;
