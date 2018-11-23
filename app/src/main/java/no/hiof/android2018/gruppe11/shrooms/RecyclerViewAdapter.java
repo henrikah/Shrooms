@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -34,6 +35,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
@@ -47,7 +50,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private static final String TAG = "bottomNavTest";
     FileDownloadTask.TaskSnapshot snapshot1;
     String generatedFilePath;
-
+    String fullEmail;
 
     double firLat;
     double firLon;
@@ -98,7 +101,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         viewHolder.image.setImageResource(R.drawable.logo);
 
         viewHolder.title.setText(Posts.get(i).getTitle());
-
+        // viewHolder.user.setText(getNickName(i));
         viewHolder.user.setText(Posts.get(i).getUser().substring(0,10));
 
 
@@ -143,6 +146,35 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
 
+
+    public String getNickName(int i){
+        final int j = i;
+
+        String[] tempArrString;
+
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("Users").document(Posts.get(i).getUser());
+        FirebaseFirestore.getInstance().collection("Users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if( Posts.get(j).getUser().equals( document.getId() ) ){
+                                    fullEmail = document.get("Email").toString().trim();
+                                }
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+
+
+        tempArrString = fullEmail.split("@");
+        List<String> stringList = new ArrayList<String>(Arrays.asList(tempArrString));
+        return stringList.get(0);
+    }
 
 
 }
