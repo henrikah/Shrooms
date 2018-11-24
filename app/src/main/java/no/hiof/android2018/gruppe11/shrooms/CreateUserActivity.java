@@ -1,7 +1,12 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
+import android.Manifest;
+import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -30,16 +36,20 @@ import no.hiof.android2018.gruppe11.shrooms.enumerator.LocationModalEnumerator;
 import no.hiof.android2018.gruppe11.shrooms.map.MapLocationPicker;
 import no.hiof.android2018.gruppe11.shrooms.map.MapThumbnail;
 
-public class CreateUserActivity extends AppCompatActivity implements ItemListDialogFragment.Listener {
+public class CreateUserActivity extends AppCompatActivity implements ItemListDialogFragment.Listener, MapLocationSelectFragment.OnFragmentInteractionListener, MapLocationPicker.OnLocationSelectedListener {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private static final String TAG = CreateUserActivity.class.getName();
-
+    private final int GET_LOCATION_REQUEST_CODE = 42;
     private EditText email;
     private EditText password;
     private EditText firstname;
     private EditText lastname;
+    private SupportMapFragment mapFragment;
+    private double lat = 59.5953;
+    private double lng = 10.4000;
+    private int zoom = 12;
 
     private Button btn;
     private Button selectHomeLocationButton;
@@ -61,8 +71,8 @@ public class CreateUserActivity extends AppCompatActivity implements ItemListDia
         /*
             Viser standard kart uten merke
          */
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(new MapThumbnail(59.5953, 10.4000, 10));
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(new MapThumbnail(lat, lng, zoom));
         if(getIntent().getExtras() != null) {
             Log.d("register", "getExtra != null");
             if(getIntent().getExtras().getString("email") != null) {
@@ -192,8 +202,52 @@ public class CreateUserActivity extends AppCompatActivity implements ItemListDia
     public void onItemClicked(int position) {
         if(position == 0) {
             // Har valgt kart
+            MapLocationSelectFragment dialog = new MapLocationSelectFragment();
+//            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            dialog.show(getSupportFragmentManager(), MapLocationSelectFragment.TAG);
         } else if(position == 1) {
+            Log.d("kart", "vi trykket på knappen");
             // Har valgt å bruke locationservice
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, GET_LOCATION_REQUEST_CODE);
+            } else {
+                updateLocation();
+            }
         }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        Log.d("kart", "vi kommer ihvertfall til onrequestpermissionsresult");
+        if(requestCode == GET_LOCATION_REQUEST_CODE) {
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d("kart", "vi har tilgang til location");
+                updateLocation();
+            } else {
+                Toast.makeText(getApplicationContext(), "You need to allow location access to use current location as your home location.", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+    public void updateLocation() {
+        Log.d("kart", "updateLocation kjøres");
+        SingleShotLocationProvider.requestSingleUpdate(getApplicationContext(),
+                new SingleShotLocationProvider.LocationCallback() {
+                    @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
+                        lat = location.latitude;
+                        lng = location.longitude;
+                        mapFragment.getMapAsync(new MapThumbnail(lat, lng, zoom));
+                        Log.d("kart", location.toString());
+                        Log.d("kart", lat + " " + lng);
+                    }
+                });
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onLocationSelected(double lat, double lng) {
+
     }
 }

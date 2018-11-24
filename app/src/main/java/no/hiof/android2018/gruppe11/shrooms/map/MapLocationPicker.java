@@ -1,5 +1,7 @@
 package no.hiof.android2018.gruppe11.shrooms.map;
 
+import android.content.Context;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -18,13 +20,25 @@ public class MapLocationPicker implements OnMapReadyCallback {
     private Marker mMarker;
 
     private double lat, lng;
-    public MapLocationPicker(double lat, double lng) {
+    public MapLocationPicker(double lat, double lng, Context context) {
         mPosition = new LatLng(lat, lng);
+        if (context instanceof OnLocationSelectedListener) {
+            onLocationSelectedListener = (OnLocationSelectedListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
     // Med egen zoom
-    MapLocationPicker(double lat, double lng, int zoom) {
+    MapLocationPicker(double lat, double lng, int zoom, Context context) {
         mPosition = new LatLng(lat, lng);
         mZoom = zoom;
+        if (context instanceof OnLocationSelectedListener) {
+            onLocationSelectedListener = (OnLocationSelectedListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnLocationSelectedListener");
+        }
     }
 
     public double getLat() {
@@ -53,6 +67,7 @@ public class MapLocationPicker implements OnMapReadyCallback {
                 }
                 lat = latLng.latitude;
                 lng = latLng.longitude;
+                onLocationSelectedListener.onLocationSelected(lat, lng);
             }
         });
 
@@ -69,5 +84,9 @@ public class MapLocationPicker implements OnMapReadyCallback {
                 return url;
             }
         }));
+    }
+    private OnLocationSelectedListener onLocationSelectedListener;
+    public interface OnLocationSelectedListener {
+        void onLocationSelected(double lat, double lng);
     }
 }
