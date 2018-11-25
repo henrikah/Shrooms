@@ -9,4 +9,25 @@
     <string name="jensen">Jensen</string>
     <string name="nope_nix_no">nope@nix.no</string>
     <string name="profilbilde">profilbilde</string>
+    <string name="select_on_map">Select on map</string>
+    <string name="use_current_location">Use current location</string>
+    <string name="get_picture_from_storage">Get picture from storage</string>
+    <string name="take_picture_with_camera">Take picture using camera</string>
+    <string name="password_is_too_weak">Password is too weak</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="email_already_exist">The E-mail already exist</string>
+    <string name="user_registered">User registered</string>
+    <string name="allow_access_to_location_error">"You need to allow location access to use current location as your home location."</string>
+    <string name="create_new_user">Create new user</string>
+    <string name="enter_firstname">Enter firstname</string>
+    <string name="enter_lastname">Enter lastname</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="enter_password">Enter password</string>
+    <string name="allow_access_to_camera_error">You need to allow camera access to use your camera.</string>
+    <string name="home_location">Home Location</string>
+    <string name="select_home_location">Select Home Location</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
 </resources>

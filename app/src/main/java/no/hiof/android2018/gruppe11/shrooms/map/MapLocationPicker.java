@@ -20,13 +20,13 @@ public class MapLocationPicker implements OnMapReadyCallback {
     private Marker mMarker;
 
     private double lat, lng;
-    public MapLocationPicker(double lat, double lng, Context context) {
+    public MapLocationPicker(double lat, double lng, Object context) {
         mPosition = new LatLng(lat, lng);
         if (context instanceof OnLocationSelectedListener) {
             onLocationSelectedListener = (OnLocationSelectedListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnPictureTaken");
         }
     }
     // Med egen zoom

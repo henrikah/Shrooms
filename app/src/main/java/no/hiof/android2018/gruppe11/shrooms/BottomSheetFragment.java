@@ -14,44 +14,39 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * <p>A fragment that shows a list of items as a modal bottom sheet.</p>
- * <p>You can show this modal bottom sheet from your activity like this:</p>
- * <pre>
- *     ItemListDialogFragment.newInstance(30).show(getSupportFragmentManager(), "dialog");
- * </pre>
- * <p>You activity (or fragment) needs to implement {@link ItemListDialogFragment.Listener}.</p>
- */
-public class ItemListDialogFragment extends BottomSheetDialogFragment {
+import no.hiof.android2018.gruppe11.shrooms.enumerator.BottomSheetItemType;
 
-    // TODO: Customize parameter argument names
+public class BottomSheetFragment extends BottomSheetDialogFragment {
+
     private static final String ARG_ITEM_COUNT = "item_count";
+    private static final String ARG_ITEMS = "items";
+    private static final String ARG_TYPE = "type";
+    private BottomSheetItemType type;
     private Listener mListener;
 
-    // TODO: Customize parameters
-    public static ItemListDialogFragment newInstance(int itemCount) {
-        final ItemListDialogFragment fragment = new ItemListDialogFragment();
+    public static BottomSheetFragment newInstance(ArrayList<String> arrayList, BottomSheetItemType type) {
+        final BottomSheetFragment fragment = new BottomSheetFragment();
         final Bundle args = new Bundle();
+        int itemCount = arrayList.size();
         args.putInt(ARG_ITEM_COUNT, itemCount);
+        args.putSerializable(ARG_TYPE, type);
+        args.putStringArrayList(ARG_ITEMS, arrayList);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_item_list_dialog, container, false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_bottom_sheet_dialog, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         final RecyclerView recyclerView = (RecyclerView) view;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("Select on map");
-        arrayList.add("Use current location");
-        recyclerView.setAdapter(new ItemAdapter(getArguments().getInt(ARG_ITEM_COUNT), arrayList));
+        type = (BottomSheetItemType)getArguments().getSerializable(ARG_TYPE);
+        recyclerView.setAdapter(new ItemAdapter(getArguments().getInt(ARG_ITEM_COUNT), getArguments().getStringArrayList(ARG_ITEMS)));
     }
 
     @Override
@@ -72,7 +67,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
     }
 
     public interface Listener {
-        void onItemClicked(int position);
+        void onItemClicked(int position, BottomSheetItemType type);
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder {
@@ -80,14 +75,13 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
         final TextView text;
 
         ViewHolder(LayoutInflater inflater, ViewGroup parent) {
-            // TODO: Customize the item layout
-            super(inflater.inflate(R.layout.fragment_item_list_dialog_item, parent, false));
+            super(inflater.inflate(R.layout.fragment_bottom_sheet_dialog_item, parent, false));
             text = itemView.findViewById(R.id.text);
             text.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
-                        mListener.onItemClicked(getAdapterPosition());
+                        mListener.onItemClicked(getAdapterPosition(), type);
                         dismiss();
                     }
                 }

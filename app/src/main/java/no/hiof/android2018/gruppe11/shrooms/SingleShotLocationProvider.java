@@ -12,12 +12,12 @@ import android.support.v4.app.ActivityCompat;
 
 public class SingleShotLocationProvider {
 
-    public static interface LocationCallback {
-        public void onNewLocationAvailable(GPSCoordinates location);
+    public interface LocationCallback {
+        void onNewLocationAvailable(GPSCoordinates location);
     }
 
     // calls back to calling thread, note this is for low grain: if you want higher precision, swap the
-    // contents of the else and if. Also be sure to check gps permission/settings are allowed.
+    // contents of the else and if. Also be sure to check gps Permission/settings are allowed.
     // call usually takes <10ms
     public static void requestSingleUpdate(final Context context, final LocationCallback callback) {
         final LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);

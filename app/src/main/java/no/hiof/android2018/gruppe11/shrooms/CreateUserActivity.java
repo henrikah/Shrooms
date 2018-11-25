@@ -1,22 +1,27 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
 import android.Manifest;
-import android.app.FragmentTransaction;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.common.images.Size;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,68 +32,123 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 
-import no.hiof.android2018.gruppe11.shrooms.enumerator.LocationModalEnumerator;
-import no.hiof.android2018.gruppe11.shrooms.map.MapLocationPicker;
+import no.hiof.android2018.gruppe11.shrooms.enumerator.BottomSheetItemType;
+import no.hiof.android2018.gruppe11.shrooms.firebase.schema.UserSchema;
+import no.hiof.android2018.gruppe11.shrooms.global.Permission;
 import no.hiof.android2018.gruppe11.shrooms.map.MapThumbnail;
 
-public class CreateUserActivity extends AppCompatActivity implements ItemListDialogFragment.Listener, MapLocationSelectFragment.OnFragmentInteractionListener, MapLocationPicker.OnLocationSelectedListener {
+public class CreateUserActivity extends AppCompatActivity implements BottomSheetFragment.Listener, MapLocationSelectFragment.OnLocationConfirmed, CameraFragment.OnPictureConfirmed {
+
+    /*
+        Class statics
+     */
+
+    private static final String TAG = CreateUserActivity.class.getName();
+
+    /*
+        Firebase
+     */
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    private static final String TAG = CreateUserActivity.class.getName();
-    private final int GET_LOCATION_REQUEST_CODE = 42;
+    private UploadTask uploadTask;
+
+    /*
+        Layout fields
+     */
+
     private EditText email;
     private EditText password;
-    private EditText firstname;
-    private EditText lastname;
+    private EditText firstName;
+    private EditText lastName;
+    private ImageView profilePic;
     private SupportMapFragment mapFragment;
+    private Button submitButton;
+
+    /*
+        User data
+     */
+
     private double lat = 59.5953;
     private double lng = 10.4000;
     private int zoom = 12;
+    private byte[] profilePicBytes;
+    private Uri downloadUri;
 
-    private Button btn;
-    private Button selectHomeLocationButton;
+    /*
+        Helpers
+     */
+
+    private boolean locationConfirmed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_user);
 
-        email = findViewById(R.id.editTextEmail);
-        password = findViewById(R.id.editTextPassword);
-        firstname = findViewById(R.id.editTextFirstname);
-        lastname = findViewById(R.id.editTextLastname);
-
-        btn = findViewById(R.id.button);
-        selectHomeLocationButton = findViewById(R.id.selectHomeLocationButton);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
+        email = findViewById(R.id.editTextEmail);
+        password = findViewById(R.id.editTextPassword);
+        firstName = findViewById(R.id.editTextFirstname);
+        lastName = findViewById(R.id.editTextLastname);
+        profilePic = findViewById(R.id.profilePic);
+        submitButton = findViewById(R.id.button);
+
+        Button selectHomeLocationButton = findViewById(R.id.selectHomeLocationButton);
+
+        /*
+            Om brukeren har skrevet inn E-post for å logge inn og heller valgt å registrere seg så henter vi ut den
+         */
+
+        if(getIntent().getExtras() != null) {
+            if(getIntent().getExtras().getString("email") != null) {
+                email.setText(getIntent().getExtras().getString("email"));
+            }
+        }
+
         /*
             Viser standard kart uten merke
          */
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(new MapThumbnail(lat, lng, zoom));
-        if(getIntent().getExtras() != null) {
-            Log.d("register", "getExtra != null");
-            if(getIntent().getExtras().getString("email") != null) {
-                Log.d("register", "getExtra.getstring != null");
-                email.setText(getIntent().getExtras().getString("email"));
-            }
-        }
+
         selectHomeLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ItemListDialogFragment.newInstance(2).show(getSupportFragmentManager(), "LocationTypeSelector");
+                ArrayList<String> arrayList = new ArrayList<>();
+                arrayList.add(getString(R.string.select_on_map));
+                arrayList.add(getString(R.string.use_current_location));
+                BottomSheetFragment.newInstance(arrayList, BottomSheetItemType.MAP).show(getSupportFragmentManager(), "LocationTypeSelector");
             }
         });
-        btn.setOnClickListener(new View.OnClickListener() {
+        profilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<String> arrayList = new ArrayList<>();
+                arrayList.add(getString(R.string.take_picture_with_camera));
+                arrayList.add(getString(R.string.get_picture_from_storage));
+                BottomSheetFragment.newInstance(arrayList, BottomSheetItemType.PICTURE).show(getSupportFragmentManager(), "PictureTypeSelector");
+            }
+        });
+        submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                submitButton.setEnabled(false);
+                if(!locationConfirmed) {
+                    lat = lng = Double.NaN;
+                }
                 Register();
             }
         });
@@ -103,9 +163,7 @@ public class CreateUserActivity extends AppCompatActivity implements ItemListDia
 
     public void Register(){
        final String emailTxt = email.getText().toString().trim();
-       final String passwordTxt = password.getText().toString().trim();
-       final String firstnameTxt = firstname.getText().toString().trim();
-       final String lastnameTxt = lastname.getText().toString().trim();
+       final String passwordTxt = password.getText().toString();
 
        // Metode for å opprette en bruker
         mAuth.createUserWithEmailAndPassword(emailTxt, passwordTxt)
@@ -117,60 +175,102 @@ public class CreateUserActivity extends AppCompatActivity implements ItemListDia
                                 throw task.getException();
                             }
                             catch (FirebaseAuthWeakPasswordException weakPassword){
-                               // Log.d(TAG, "password is too weak");
-                                Toast.makeText(CreateUserActivity.this, "password is too weak" ,Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CreateUserActivity.this, getString(R.string.password_is_too_weak) ,Toast.LENGTH_SHORT).show();
                             }
                             catch (FirebaseAuthInvalidCredentialsException malformedEmail){
-                             //   Log.d(TAG, " Uncomplete email");
-                                Toast.makeText(CreateUserActivity.this, "Uncomplete email" ,Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CreateUserActivity.this, getString(R.string.invalid_email) ,Toast.LENGTH_SHORT).show();
                             }
                             catch (FirebaseAuthUserCollisionException existEmail){
-                               // Log.d(TAG, "The Email does already exist");
-                                Toast.makeText(CreateUserActivity.this, "The Email does already exist" ,Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CreateUserActivity.this, getString(R.string.email_already_exist) ,Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
                                 Log.d(TAG, e.getMessage());
                             }
-                        }
-                        if (task.isSuccessful()) {
-                            saveUser();
-
-                            signIn(emailTxt,passwordTxt);
+                            submitButton.setEnabled(true);
+                        } else {
+                            uploadProfilePicture();
                         }
                     }
                 });
     }
+    public void uploadProfilePicture() {
+        // Om brukeren ikke har valgt et profilbilde sender vi en tom uri
+        if(profilePicBytes == null) {
+            downloadUri = Uri.parse("");
+            saveUser();
+            signIn(email.getText().toString().trim(), password.getText().toString().trim());
+        } else {
+            FirebaseUser user = mAuth.getCurrentUser();
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            final StorageReference imageReference = storage.getReference().child("profilePicture/" + user.getUid() + ".png");
 
+            uploadTask = imageReference.putBytes(profilePicBytes);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    /*
+                        Om opplastningen ikke fullførte så fullfører vi uansett registreringen men med tomt bilde.
+                     */
+                    downloadUri = Uri.parse("");
+                    saveUser();
+                    signIn(email.getText().toString().trim(), password.getText().toString().trim());
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
+                        uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                            @Override
+                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                if (!task.isSuccessful()) {
+                                    throw task.getException();
+                                }
+
+                                return imageReference.getDownloadUrl();
+                            }
+                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+                                if (task.isSuccessful()) {
+                                    downloadUri = task.getResult();
+                                    saveUser();
+                                    signIn(email.getText().toString().trim(), password.getText().toString());
+
+                                }
+                            }
+                        });
+                    }
+            });
+        }
+    }
     public void saveUser(){
         final String emailTxt = email.getText().toString().trim();
-        final String passwordTxt = password.getText().toString().trim();
-        final String firstnameTxt = firstname.getText().toString().trim();
-        final String lastnameTxt = lastname.getText().toString().trim();
+        final String firstNameTxt = firstName.getText().toString().trim();
+        final String lastNameTxt = lastName.getText().toString().trim();
 
         // lager et dokument start
         FirebaseUser user = mAuth.getCurrentUser();
+        if(user != null) {
+            user.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(firstNameTxt + " " + lastNameTxt).setPhotoUri(downloadUri).build());
 
-        Map<String, Object> userMap = new HashMap<>();
-        userMap.put("Email", emailTxt);
-        userMap.put("Firstname",firstnameTxt);
-        userMap.put("Lastname", lastnameTxt);
-        userMap.put("Uid", user.getUid());
+            // lager et dokument slutt
+            final UserSchema userSchema = new UserSchema(emailTxt, firstNameTxt, lastNameTxt, downloadUri.toString(), lat, lng, user.getUid());
 
-        // lager et dokument slutt
 
-        // Legger til et dokument i firestore
-        db.collection("Users").document(user.getUid())
-                .set(userMap)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                       Toast.makeText(CreateUserActivity.this,"Bruker Registrert 1",Toast.LENGTH_SHORT).show();                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(CreateUserActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
-            }
-        });
+            // Legger til et dokument i firestore
+            db.collection("Users").document(user.getUid())
+                    .set(userSchema.getFull())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(CreateUserActivity.this, getString(R.string.user_registered), Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(CreateUserActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
 
 
@@ -183,15 +283,8 @@ public class CreateUserActivity extends AppCompatActivity implements ItemListDia
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-
-                            Log.d(TAG, "Innlogging gikk bra.");
-
                             Intent myIntent = new Intent(CreateUserActivity.this, bottomNavTest.class);
                             startActivity(myIntent);
-
-                        } else {
-                           Log.d(TAG, "Innlogging feilet.");
                         }
                     }
                 });
@@ -199,55 +292,94 @@ public class CreateUserActivity extends AppCompatActivity implements ItemListDia
 
 
     @Override
-    public void onItemClicked(int position) {
-        if(position == 0) {
-            // Har valgt kart
-            MapLocationSelectFragment dialog = new MapLocationSelectFragment();
-//            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            dialog.show(getSupportFragmentManager(), MapLocationSelectFragment.TAG);
-        } else if(position == 1) {
-            Log.d("kart", "vi trykket på knappen");
-            // Har valgt å bruke locationservice
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, GET_LOCATION_REQUEST_CODE);
-            } else {
-                updateLocation();
+    public void onItemClicked(int position, BottomSheetItemType type) {
+        if(type == BottomSheetItemType.MAP) {
+            if(position == 0) {
+                /*
+                    Har valgt kart
+                  */
+                Bundle args = new Bundle();
+                args.putDouble("latitude", lat);
+                args.putDouble("longitude", lng);
+                MapLocationSelectFragment dialog = new MapLocationSelectFragment();
+                dialog.setArguments(args);
+                dialog.show(getSupportFragmentManager(), MapLocationSelectFragment.TAG);
+            } else if(position == 1) {
+                /*
+                    Har valgt å bruke locationservice
+                  */
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Permission.GET_LOCATION_REQUEST_CODE);
+                } else {
+                    updateLocation();
+                }
+            }
+        } else if(type == BottomSheetItemType.PICTURE) {
+            if(position == 0) {
+                /*
+                    Har valgt kamera
+                 */
+                CameraFragment dialog = new CameraFragment();
+                dialog.show(getSupportFragmentManager(), CameraFragment.TAG);
+            } else if(position == 1) {
+                /*
+                    Har valgt filepicker
+                 */
+                FilePick.getPhoto(this);
+            }
+        }
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        if (resultCode == Activity.RESULT_OK) {
+            Uri uri;
+            Bitmap bm;
+            if (resultData != null) {
+                uri = resultData.getData();
+                ImageView iv = findViewById(R.id.profilePic);
+                try {
+                    bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bm.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    profilePicBytes = stream.toByteArray();
+                    iv.setImageBitmap(bm);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        Log.d("kart", "vi kommer ihvertfall til onrequestpermissionsresult");
-        if(requestCode == GET_LOCATION_REQUEST_CODE) {
+        if(requestCode == Permission.GET_LOCATION_REQUEST_CODE) {
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d("kart", "vi har tilgang til location");
                 updateLocation();
             } else {
-                Toast.makeText(getApplicationContext(), "You need to allow location access to use current location as your home location.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.allow_access_to_location_error), Toast.LENGTH_LONG).show();
             }
         }
     }
     public void updateLocation() {
-        Log.d("kart", "updateLocation kjøres");
         SingleShotLocationProvider.requestSingleUpdate(getApplicationContext(),
                 new SingleShotLocationProvider.LocationCallback() {
                     @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
                         lat = location.latitude;
                         lng = location.longitude;
                         mapFragment.getMapAsync(new MapThumbnail(lat, lng, zoom));
-                        Log.d("kart", location.toString());
-                        Log.d("kart", lat + " " + lng);
                     }
                 });
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void onLocationConfirmed(double latitude, double longitude) {
+        lat = latitude;
+        lng = longitude;
+        mapFragment.getMapAsync(new MapThumbnail(lat, lng, zoom));
+        locationConfirmed = true;
     }
 
     @Override
-    public void onLocationSelected(double lat, double lng) {
-
+    public void onPictureConfirmed(byte[] picture, Size size) {
+        profilePicBytes = picture;
+        profilePic.setImageBitmap(BitmapFactory.decodeByteArray(picture, 0, picture.length));
     }
 }
