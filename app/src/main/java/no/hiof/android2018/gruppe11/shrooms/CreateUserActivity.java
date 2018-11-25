@@ -12,7 +12,11 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -133,6 +137,7 @@ public class CreateUserActivity extends AppCompatActivity implements BottomSheet
                 BottomSheetFragment.newInstance(arrayList, BottomSheetItemType.MAP).show(getSupportFragmentManager(), "LocationTypeSelector");
             }
         });
+
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,6 +147,7 @@ public class CreateUserActivity extends AppCompatActivity implements BottomSheet
                 BottomSheetFragment.newInstance(arrayList, BottomSheetItemType.PICTURE).show(getSupportFragmentManager(), "PictureTypeSelector");
             }
         });
+
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,8 +158,38 @@ public class CreateUserActivity extends AppCompatActivity implements BottomSheet
                 Register();
             }
         });
-    }
 
+        submitButton.setEnabled(false);
+        email.addTextChangedListener(textWatcher());
+        password.addTextChangedListener(textWatcher());
+        firstName.addTextChangedListener(textWatcher());
+        lastName.addTextChangedListener(textWatcher());
+    }
+    public TextWatcher textWatcher() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                 /*
+                    Sjekker at E-posten er gyldig, at det skrevet inn et passord, og at det er skrevet inn fornavn og etternavn før vi skrur på registreringsknappen.
+                 */
+                if(Patterns.EMAIL_ADDRESS.matcher(email.getText()).matches() && !TextUtils.isEmpty(password.getText()) && !TextUtils.isEmpty(firstName.getText()) && !TextUtils.isEmpty(lastName.getText())) {
+                    submitButton.setEnabled(true);
+                } else {
+                    submitButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+    }
     @Override
     protected void onStart() {
         super.onStart();
