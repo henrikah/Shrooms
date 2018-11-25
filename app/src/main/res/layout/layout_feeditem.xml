@@ -58,14 +58,4 @@
 
         android:paddingLeft="15dp"/>
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/feedItemImage"
-        android:layout_toEndOf="@+id/feedItemImage"
-        android:backgroundTint="@android:color/transparent"
-        android:text="Finn på kartet"
-
-        android:paddingLeft="15dp"/>
 </RelativeLayout>

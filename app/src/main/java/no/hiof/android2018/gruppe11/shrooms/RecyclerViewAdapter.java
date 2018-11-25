@@ -1,6 +1,7 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Debug;
@@ -47,7 +48,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private StorageReference mStorageRef;
     StorageReference mushroomImagesRef;
     String pictureID;
-    private static final String TAG = "bottomNavTest";
+    private static final String TAG = "Errorbro";
     FileDownloadTask.TaskSnapshot snapshot1;
     String generatedFilePath;
     String fullEmail;
@@ -73,7 +74,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         pictureID = Posts.get(i).getBildeNavn();
         //pictureID = Posts.get(i).getTitle();
         mushroomImagesRef = mStorageRef.child("brukerBilder/"+pictureID);
@@ -96,12 +97,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
-
-
         viewHolder.image.setImageResource(R.drawable.logo);
 
         viewHolder.title.setText(Posts.get(i).getTitle());
-        // viewHolder.user.setText(getNickName(i));
+        //viewHolder.user.setText(getNickName(i));
         viewHolder.user.setText(Posts.get(i).getUser().substring(0,10));
 
 
@@ -116,9 +115,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         newLoc.setLatitude(secLat);
         newLoc.setLongitude(secLon);
         double distance = (Math.sqrt(Math.pow((secLat - firLat),2) + Math.pow((secLon - firLon),2))) * 83.57;
-
+        final Post kuk = Posts.get(i);
 
         viewHolder.distance.setText((new DecimalFormat("#.#").format(oldLoc.distanceTo(newLoc) / 1000) ) + " Km");
+
+        viewHolder.feedLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), MapActivityOpenPost.class);
+
+                intent.putExtra("lat", kuk.location.getLatitude());
+                intent.putExtra("lon", kuk.location.getLongitude());
+
+                v.getContext().startActivity(intent);
+            }
+        });
 
     }
 
@@ -148,11 +159,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     public String getNickName(int i){
+
         final int j = i;
 
         String[] tempArrString;
-
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("Users").document(Posts.get(i).getUser());
         FirebaseFirestore.getInstance().collection("Users")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -160,8 +170,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
+
                                 if( Posts.get(j).getUser().equals( document.getId() ) ){
-                                    fullEmail = document.get("Email").toString().trim();
+                                    fullEmail = document.get("Email").toString();
+
+                                    Log.w("Neger kuk", fullEmail+" "+document.get("Email").toString() + "nr: "+j);
                                 }
                             }
                         } else {
@@ -169,12 +182,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         }
                     }
                 });
+        if(fullEmail == null){
+          //  Log.w("Neger penis", Posts.get(j).getUser());
+           // Log.w("Neger penis", Posts.get(j).getTitle());
+            Log.w("Neger kuk2", fullEmail+" "+Posts.get(j).getUser() + "nr: "+j);
+            return "username";
+        }
+        /*tempArrString = fullEmail.split("@");
+
+            List<String> stringList = new ArrayList<String>(Arrays.asList(tempArrString));
+            return stringList.get(0);*/
+           return fullEmail;
+        }
 
 
-        tempArrString = fullEmail.split("@");
-        List<String> stringList = new ArrayList<String>(Arrays.asList(tempArrString));
-        return stringList.get(0);
-    }
 
 
 }
