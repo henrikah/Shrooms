@@ -74,6 +74,8 @@ public class NewPostFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mushroomsRef = mStorageRef.child("mushrooms.png");
         long timeStamp = System.currentTimeMillis();
@@ -109,6 +111,7 @@ public class NewPostFragment extends Fragment {
 
 
         saveImageToDatabase(thumbnail);
+
         postBtn = (Button) v.findViewById(R.id.button2);
 
         postBtn.setOnClickListener(new View.OnClickListener() {
@@ -126,7 +129,6 @@ public class NewPostFragment extends Fragment {
             }
         });
 
-
     }
 
     public void createPost(){
@@ -136,7 +138,9 @@ public class NewPostFragment extends Fragment {
         String titleText = title.getText().toString();
         String descText = description.getText().toString();
 
-        GeoPoint geoPoint = new GeoPoint(latitude,longitude);;
+        GeoPoint geoPoint = new GeoPoint(latitude,longitude);
+
+
 
 
         mUser = mAuth.getCurrentUser();
@@ -145,6 +149,8 @@ public class NewPostFragment extends Fragment {
         Post p = new Post(titleText,descText,userUid,timeStamp,geoPoint);
         p.setBildeNavn(pictureID);
         lagrePostIFireStore(p);
+        Intent myIntent = new Intent(getActivity(), bottomNavTest.class);
+        startActivity(myIntent);
     }
 
     // Kode for å lagre bilde til Firebase Storage
@@ -204,11 +210,11 @@ public class NewPostFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getActivity(),"Post registrert",Toast.LENGTH_SHORT).show();                    }
+                        Log.d(TAG, "Lagring av post gikk bra");                   }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Lagring av post feilet.");
             }
         });
 
@@ -230,6 +236,8 @@ public class NewPostFragment extends Fragment {
         lagrePostIFireStore(p3);
         lagrePostIFireStore(p4);
     }
+
+
 }
 
 
