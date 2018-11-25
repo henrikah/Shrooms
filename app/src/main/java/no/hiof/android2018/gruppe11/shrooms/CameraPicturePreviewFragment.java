@@ -19,7 +19,7 @@ import java.io.ByteArrayOutputStream;
 public class CameraPicturePreviewFragment extends Fragment {
 
     private static final String ARG_IMAGE_BYTES = "imageBytes";
-    private static final String ARG_IMAGE_HEIGHT = "imageHeigh";
+    private static final String ARG_IMAGE_HEIGHT = "imageHeight";
     private static final String ARG_IMAGE_WIDTH = "imageWidth";
 
     private byte[] imageBytes;

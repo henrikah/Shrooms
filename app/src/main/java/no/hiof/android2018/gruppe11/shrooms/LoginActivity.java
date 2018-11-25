@@ -120,18 +120,15 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, "Invalid E-mail or password" ,Toast.LENGTH_SHORT).show();
                             }
                             catch (Exception e){
+                                Log.d(TAG,"Fikk ikke logget inn");
+                                Toast.makeText(LoginActivity.this, "An error occured. Try again" ,Toast.LENGTH_SHORT).show();
                                 Log.d(TAG, e.getMessage());
                             }
-                        }
-                        if (task.isSuccessful()) {
+                        } else {
                             Log.d(TAG,"Fikk logget inn");
 
                             Intent myIntent = new Intent(LoginActivity.this, bottomNavTest.class);
                             startActivity(myIntent);
-
-                        } else {
-                            Log.d(TAG,"Fikk ikke logget inn");
-                            Toast.makeText(LoginActivity.this, "An error occured. Try again" ,Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
