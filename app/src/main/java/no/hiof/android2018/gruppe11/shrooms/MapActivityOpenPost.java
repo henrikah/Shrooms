@@ -21,7 +21,7 @@ public class MapActivityOpenPost extends AppCompatActivity {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         Post kek = new Post("Null","Null","Null",1479249799770L,new GeoPoint(lan,lon));
         MapPostMarker mpm = new MapPostMarker(lan,lon, kek);
-        mapFragment.getMapAsync(new MapWithPosts(lan,lon, mpm));
+        mapFragment.getMapAsync(new MapWithPosts(lan,lon, mpm, 18));
     }
 
 }
