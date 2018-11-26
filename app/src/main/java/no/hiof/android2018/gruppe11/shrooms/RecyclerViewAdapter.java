@@ -115,7 +115,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         newLoc.setLatitude(secLat);
         newLoc.setLongitude(secLon);
         double distance = (Math.sqrt(Math.pow((secLat - firLat),2) + Math.pow((secLon - firLon),2))) * 83.57;
-        final Post kuk = Posts.get(i);
+        final Post post = Posts.get(i);
 
         viewHolder.distance.setText((new DecimalFormat("#.#").format(oldLoc.distanceTo(newLoc) / 1000) ) + " Km");
 
@@ -124,8 +124,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), MapActivityOpenPost.class);
 
-                intent.putExtra("lat", kuk.location.getLatitude());
-                intent.putExtra("lon", kuk.location.getLongitude());
+                intent.putExtra("lat", post.location.getLatitude());
+                intent.putExtra("lon", post.location.getLongitude());
 
                 v.getContext().startActivity(intent);
             }
