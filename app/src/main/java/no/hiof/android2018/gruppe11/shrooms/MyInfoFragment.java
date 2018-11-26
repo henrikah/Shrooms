@@ -1,6 +1,9 @@
 package no.hiof.android2018.gruppe11.shrooms;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,9 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,19 +24,24 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 public class MyInfoFragment extends Fragment {
-    private Image image;
-    private TextView firstName;
-    private TextView lastName;
+    private ImageView image;
+    private TextView name;
     private TextView mail;
     private FirebaseFirestore db;
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
 
+
     public MyInfoFragment() {
-        // Required empty public constructor
     }
 
 
@@ -54,18 +64,18 @@ public class MyInfoFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        lastName = getView().findViewById(R.id.lastName);
-        firstName = getView().findViewById(R.id.firstName);
+        name = getView().findViewById(R.id.profileName);
         mail = getView().findViewById(R.id.userMail);
+        image = getView().findViewById(R.id.profilePic);
 
-        db.collection("Users").whereArrayContains("Uid",currentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        lastName.setText(document.getString("Lastname"));
-                        firstName.setText(document.getString("Firstname"));
-                        mail.setText(document.getString("Email"));
+                            //Picasso.get().load(document.getString("ProfilePic")).into(image);
+                            name.setText(document.get("Firstname").toString());
+                            mail.setText(document.getString("Email"));
                     }
                 } else {
 
