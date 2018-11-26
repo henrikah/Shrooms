@@ -103,21 +103,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         //viewHolder.user.setText(getNickName(i));
         viewHolder.user.setText(Posts.get(i).getUser().substring(0,10));
 
+        if(Posts.get(i).getLocation() != null) {
+            double secLat = Posts.get(i).getLocation().getLatitude();
+            double secLon = Posts.get(i).getLocation().getLongitude();
 
-        double secLat = Posts.get(i).getLocation().getLatitude();
-        double secLon = Posts.get(i).getLocation().getLongitude();
+            Location oldLoc = new Location("oldLoc");
+            oldLoc.setLatitude(firLat);
+            oldLoc.setLongitude(firLon);
 
-        Location oldLoc = new Location("oldLoc");
-        oldLoc.setLatitude(firLat);
-        oldLoc.setLongitude(firLon);
+            Location newLoc = new Location("newLoc");
+            newLoc.setLatitude(secLat);
+            newLoc.setLongitude(secLon);
+            double distance = (Math.sqrt(Math.pow((secLat - firLat),2) + Math.pow((secLon - firLon),2))) * 83.57;
 
-        Location newLoc = new Location("newLoc");
-        newLoc.setLatitude(secLat);
-        newLoc.setLongitude(secLon);
-        double distance = (Math.sqrt(Math.pow((secLat - firLat),2) + Math.pow((secLon - firLon),2))) * 83.57;
+            viewHolder.distance.setText((new DecimalFormat("#.#").format(oldLoc.distanceTo(newLoc) / 1000) ) + " Km");
+        }
         final Post kuk = Posts.get(i);
-
-        viewHolder.distance.setText((new DecimalFormat("#.#").format(oldLoc.distanceTo(newLoc) / 1000) ) + " Km");
 
         viewHolder.feedLayout.setOnClickListener(new View.OnClickListener() {
             @Override
