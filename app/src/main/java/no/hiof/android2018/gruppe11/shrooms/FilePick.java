@@ -3,6 +3,7 @@ package no.hiof.android2018.gruppe11.shrooms;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 
 
 public class FilePick {
@@ -17,6 +18,17 @@ public class FilePick {
         intent.setType("image/*");
 
        activity.startActivityForResult(intent, READ_REQUEST_CODE);
+
+    }
+    public  static void getPhoto(Fragment fragment) {
+
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        intent.setType("image/*");
+
+       fragment.startActivityForResult(intent, READ_REQUEST_CODE);
 
     }
     // Eksempel på implementering av bildehåndtering i activityen som kaller på denne klassen
