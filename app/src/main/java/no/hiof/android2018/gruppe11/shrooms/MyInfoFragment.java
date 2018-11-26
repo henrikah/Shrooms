@@ -73,8 +73,9 @@ public class MyInfoFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                            //Picasso.get().load(document.getString("ProfilePic")).into(image);
-                            name.setText(document.get("Firstname").toString());
+                            Picasso.get().load(document.getString("ProfilePic")).into(image);
+                            String tempName = document.getString("Firstname") + " " + document.getString("Lastname");
+                            name.setText(tempName);
                             mail.setText(document.getString("Email"));
                     }
                 } else {
