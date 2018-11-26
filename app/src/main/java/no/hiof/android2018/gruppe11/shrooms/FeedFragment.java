@@ -70,7 +70,7 @@ public class FeedFragment extends Fragment {
                                 GeoPoint loc = document.getGeoPoint("Location");
                                 String userName = document.getString("UserID");
                                 Long timeStamp = document.getLong("Timestamp");
-                                String bildeNavn = document.getString("bildeNavn");
+                                String bildeNavn = document.getString("MushroomPic");
                                 Post p = new Post(title,desc,userName,timeStamp,loc,bildeNavn);
                                 posts.add(p);
                                 // det gikk fint

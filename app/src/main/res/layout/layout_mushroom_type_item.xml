@@ -22,9 +22,7 @@
         android:layout_toRightOf="@+id/ivFlag"
         android:padding="5dp"
         android:text="TextView"
-        android:textColor="@color/colorAccent"
         android:textSize="20sp"
-        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivFlag"
         app:layout_constraintTop_toTopOf="parent" />
