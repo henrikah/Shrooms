@@ -64,11 +64,21 @@ public class CameraFragment extends DialogFragment implements CameraPreviewFragm
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnPictureConfirmed) {
-            mListener = (OnPictureConfirmed) context;
+        final android.support.v4.app.Fragment parent = getParentFragment();
+        if (parent != null) {
+            if(parent instanceof OnPictureConfirmed) {
+                mListener = (OnPictureConfirmed) parent;
+            } else {
+                throw new RuntimeException(context.toString()
+                        + " must implement OnPictureTaken");
+            }
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnPictureTaken");
+            if (context instanceof OnPictureConfirmed) {
+                mListener = (OnPictureConfirmed) context;
+            } else {
+                throw new RuntimeException(context.toString()
+                        + " must implement OnPictureTaken");
+            }
         }
     }
 

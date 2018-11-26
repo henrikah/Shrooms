@@ -30,4 +30,11 @@
     <string name="enter_your_password">Enter your password</string>
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
+    <string name="error_retrieving_mushrooms">There was an error retrieving the list of mushrooms</string>
+    <string name="error_creating_post">There was an error creating your post</string>
+    <string name="new_post">New Post</string>
+    <string name="title">Title</string>
+    <string name="post">Post</string>
+    <string name="description">Description</string>
+    <string name="set_location">Set Location</string>
 </resources>

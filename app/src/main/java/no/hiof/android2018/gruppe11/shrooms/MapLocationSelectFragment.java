@@ -89,12 +89,23 @@ public class MapLocationSelectFragment extends DialogFragment implements MapLoca
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnLocationConfirmed) {
-            mListener = (OnLocationConfirmed) context;
+        final android.support.v4.app.Fragment parent = getParentFragment();
+        if (parent != null) {
+            if(parent instanceof OnLocationConfirmed) {
+                mListener = (OnLocationConfirmed) parent;
+            } else {
+                throw new RuntimeException(context.toString()
+                        + " must implement OnLocationConfirmed");
+            }
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnPictureTaken");
+            if (context instanceof OnLocationConfirmed) {
+                mListener = (OnLocationConfirmed) context;
+            } else {
+                throw new RuntimeException(context.toString()
+                        + " must implement OnLocationConfirmed");
+            }
         }
+
     }
 
     @Override

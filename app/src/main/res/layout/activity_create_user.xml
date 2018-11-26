@@ -116,7 +116,7 @@
         android:text="@string/sign_up"
         app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
         app:layout_constraintStart_toStartOf="@+id/editTextPassword"
-        app:layout_constraintTop_toBottomOf="@+id/map" />
+        app:layout_constraintTop_toBottomOf="@+id/postMap" />
 
     <TextView
         android:id="@+id/textView4"
@@ -126,7 +126,7 @@
         android:layout_marginEnd="8dp"
         android:text="@string/home_location"
         android:textColor="@android:color/white"
-        app:layout_constraintEnd_toStartOf="@+id/map"
+        app:layout_constraintEnd_toStartOf="@+id/postMap"
         app:layout_constraintStart_toStartOf="@+id/editTextPassword"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
@@ -138,12 +138,12 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/select_home_location"
-        app:layout_constraintEnd_toStartOf="@+id/map"
+        app:layout_constraintEnd_toStartOf="@+id/postMap"
         app:layout_constraintStart_toStartOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/map"
+        android:id="@+id/postMap"
         class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"

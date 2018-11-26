@@ -11,7 +11,7 @@ public class MapTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_map_test);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.postMap);
         mapFragment.getMapAsync(new MapLocationPicker(59.5953, 10.4000, getApplicationContext()));
 
     }

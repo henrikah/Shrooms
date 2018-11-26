@@ -125,7 +125,7 @@ public class CreateUserActivity extends AppCompatActivity implements BottomSheet
         /*
             Viser standard kart uten merke
          */
-        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.postMap);
         mapFragment.getMapAsync(new MapThumbnail(lat, lng, zoom));
 
         selectHomeLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -365,6 +365,9 @@ public class CreateUserActivity extends AppCompatActivity implements BottomSheet
             }
         }
     }
+    /*
+        Metoden for å da imot bilde fra filepicker
+     */
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
         if (resultCode == Activity.RESULT_OK) {
             Uri uri;
