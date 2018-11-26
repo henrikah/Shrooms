@@ -58,14 +58,14 @@ public class MyInfoFragment extends Fragment {
         firstName = getView().findViewById(R.id.firstName);
         mail = getView().findViewById(R.id.userMail);
 
-        db.collection("Bruker").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("Users").whereArrayContains("Uid",currentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         lastName.setText(document.getString("Lastname"));
                         firstName.setText(document.getString("Firstname"));
-                        mail.setText(document.getString("Mail"));
+                        mail.setText(document.getString("Email"));
                     }
                 } else {
 
